@@ -1,0 +1,36 @@
+% Here starts the preamble
+\documentclass[12pt]{article}
+\input{LaTex/packages}
+\input{LaTex/commands}
+
+\begin{document}
+\pdfbookmark[0]{Titel page}{Titel page}
+\begin{titlepage}
+	\centering
+	\includesvg[width=0.75\textwidth]{LaTex/imgs/BSE Barcelona Graduate School of Economics.svg}\par\vspace{0.75cm}
+	{\huge\bfseries \cl -- Final Project \nass\par}
+        {\large\bfseries DSDM -- BSE\par}
+	\vspace{0.75cm}
+    \noindent\rule{\textwidth}{1pt}
+    {\Large Blanca Jimenez ()\par}
+    {\Large Maria Simakova ()\par}
+	{\Large Moritz Peist (254017)\par}
+    \noindent\rule{\textwidth}{1pt}
+    \tableofcontents
+	\vfill
+
+% Bottom of the page
+	{\large \today\par}
+\end{titlepage}
+
+\newpage
+\include*{LaTex/chapters/part1}
+\include*{LaTex/chapters/part2}
+\include*{LaTex/chapters/part3}
+
+%\newpage
+%\include{LaTex/appendix}
+
+\printbibliography[heading=bibintoc,title={References}]
+
+\end{document}   
