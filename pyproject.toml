@@ -1,0 +1,29 @@
+[project]
+name = "tm-final-env"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "altair>=5.5.0",
+    "duckdb>=1.2.0",
+    "gensim>=4.3.3",
+    "jupyter>=1.1.1",
+    "lxml>=5.3.1",
+    "matplotlib>=3.10.1",
+    "nltk>=3.9.1",
+    "pandas>=2.2.3",
+    "pip>=25.0.1",
+    "polars>=1.24.0",
+    "py7zr>=0.22.0",
+    "pyarrow>=19.0.1",
+    "ruff>=0.9.9",
+    "scikit-learn>=1.6.1",
+    "seaborn>=0.13.2",
+    "spacy>=3.8.4",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+]
