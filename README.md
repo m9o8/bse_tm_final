@@ -1,6 +1,6 @@
 # Text Mining 2024-2025 - Final Project
 
-## Authors:
+## Authors
 
 - Blanca Jimenez
 - Maria Simakova
