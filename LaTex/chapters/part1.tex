@@ -22,67 +22,6 @@ We approach these questions through a two-stage methodology. First, we establish
 
 Our dataset spans January 2021 to March 2024, encompassing over 1.3 million questions from Stack Overflow. For the causal analysis component, we incorporate data from four non-programming Stack Exchange forums (Mathematics, Physics, Superuser, and AskUbuntu) as control units (approx. 0.7 million questions). This comprehensive dataset allows us to both establish causality and conduct in-depth textual analysis to characterize the changing nature of developer queries in the age of AI assistants.
 
-\section{Causal Impact Analysis}
-Before diving into our primary NLP analysis, we first establish the causal impact of ChatGPT on Stack Overflow question volumes. This section briefly outlines our causal inference methodology and findings, which provide critical context for interpreting the subsequent NLP results.
-
-\subsection{Synthetic Difference-in-Differences Methodology}
-To identify the causal impact of ChatGPT on Stack Overflow question volumes, we employ a Synthetic Difference-in-Differences (SDID) approach. This methodology combines the strengths of traditional difference-in-differences and synthetic control methods, allowing us to construct a credible counterfactual for Stack Overflow in the absence of ChatGPT.\\
-
-The selection of Mathematics, Physics, Superuser, and AskUbuntu as control units was strategically motivated by several considerations:
-\begin{enumerate}
-    \item These Stack Exchange forums represent technical knowledge domains with structured question patterns similar to Stack Overflow, yet they address distinct subject matters that were less effectively handled by early ChatGPT versions (3.5). While ChatGPT demonstrated strong capabilities in programming tasks from its initial release, it exhibited notable limitations in advanced mathematics, physics reasoning, and system-specific troubleshooting—areas central to our control forums. 
-    \item These forums maintain sufficient question volumes to provide statistical power while exhibiting pre-treatment correlation with Stack Overflow question patterns (correlation coefficients between 0.76-0.87, cf. \ref{fig:correlation_matrix}), suggesting similar responsiveness to seasonal trends and external factors affecting forum usage. 
-    \item These forums occupy adjacent positions in the broader STEM knowledge ecosystem, making them vulnerable to similar secular trends in online knowledge-seeking behavior while remaining differentially exposed to the treatment effect of interest, thus satisfying the key assumptions required for synthetic control methods.
-\end{enumerate}
-
-\begin{figure}[htpb!]
-    \centering
-    \includesvg[width=1\linewidth]{imgs/transformed_trends.svg}
-    \caption{Parallel trends assumption}
-    \label{fig:transformed_trends}
-\end{figure}
-
-A critical assumption for traditional difference-in-differences analysis is the parallel trends assumption, which requires that treatment and control groups follow similar trajectories in the absence of treatment. Figure \ref{fig:transformed_trends} visualizes the question volumes across all forums using different transformations (raw, log-transformed, and indexed counts). While raw counts show substantial scale differences, the log transformation reveals approximately parallel pre-treatment trends between Stack Overflow and the control forums, particularly evident in the middle panel. In contrast, post-treatment StackOverflow sees a constant decrease while the other forums stay somewhat stable. This transformation not only addresses heterogeneity in question volumes but also improves the validity of our causal inference by better satisfying the parallel trends assumption, though the synthetic control component of our SDID approach further relaxes this requirement by constructing an optimal weighted combination of control units.\\
-
-The SDID estimator constructs a synthetic version of Stack Overflow by weighting other Stack Exchange forums (Mathematics, Physics, Superuser, and AskUbuntu) and pre-treatment time periods optimally. Formally, the SDID estimator can be expressed as:
-
-\begin{equation}
-    \hat{\tau}_{SDID} = \sum_{t=T_0+1}^T \lambda_t \left( Y_{1t} - \sum_{j=2}^J \omega_j Y_{jt} \right) - \sum_{t=1}^{T_0} \lambda_t \left( Y_{1t} - \sum_{j=2}^J \omega_j Y_{jt} \right)
-\end{equation}
-
-where $Y_{jt}$ represents the log-transformed question count for forum $j$ at time $t$, $\omega_j$ are unit weights, $\lambda_t$ are time weights, $T_0$ is the last pre-treatment period, and unit $j=1$ represents Stack Overflow. We implemented this methodology using a basic custom implementation, Microsoft's \href{https://microsoft.github.io/SynapseML/docs/Overview/}{SynapseML} library, and \textcite{clarke_synthetic_2023} Stata implementation to ensure robustness of our findings.
-
-\subsection{Causal Impact Results}
-
-Figure \ref{fig:synthetic_control} visualizes the divergence between Stack Overflow's actual question volume and its synthetic counterfactual after ChatGPT's release. The figure shows that while the synthetic control closely tracks Stack Overflow's question volume before ChatGPT's release, a gap emerges immediately after treatment.\\
-
-\begin{figure}[htpb!]
-    \centering
-    \includesvg[width=1\textwidth]{imgs/synthetic_control_log.svg}
-    \caption{Synthetic Control Analysis of ChatGPT's Impact on Stack Overflow}
-    \label{fig:synthetic_control}
-\end{figure}
-
-Table \ref{tab:results} presents the formal estimates of ChatGPT's impact on Stack Overflow question volume using both our implementations.\\
-
-\begin{table}[htpb!]
-\centering
-    \begin{tabular}{lrrrr}
-        \toprule
-        \textbf{Method} & \textbf{Treat. Eff.} & \textbf{Std. Err.} & \textbf{t-stat.} & \textbf{p-val.} \\
-        \midrule
-        Custom SDID Implementation & -0.34 & 0.06 & -5.73 & $<0.0001$ \\
-        SynapseML SDID & -0.30 & 0.07 & -4.50 & $<0.0001$ \\
-        \bottomrule
-    \end{tabular}
-    \caption{Estimated Impact of ChatGPT on Stack Overflow Question Volume}
-    \label{tab:results}
-\end{table}
-
-Both implementations yield significant adverse effects, with treatment effect estimates ranging from -0.30 to -0.34 in log units. This translates to approximately a 26-29\% reduction in Stack Overflow question volume attributable to ChatGPT's introduction. This substantial decline motivates our core research question: how has the nature of the remaining questions changed?
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Causal Impact Analysis}
