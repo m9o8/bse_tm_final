@@ -145,16 +145,18 @@ These results indicate statistically significant negative effects, with a larger
 \subsubsection{Synthetic DiD Results}
 To address potential violations of the parallel trends assumption and create a more credible counterfactual, we employ the SDID approach. Figure \ref{fig:sdid_all} visualizes the results for all Stack Overflow questions, while Figure \ref{fig:sdid_script} focuses on scripting language questions.
 
-\begin{figure}[htb]
-\centering
-\caption{Synthetic Control Analysis: Impact on All Stack Overflow Questions}
-\label{fig:sdid_all}
+\begin{figure}[htpb!]
+    \centering
+    \includesvg[width=1\textwidth]{imgs/stata/sdid_all_trends101.svg}
+    \caption{Synthetic Control Analysis: Impact on All Stack Overflow Questions}
+    \label{fig:sdid_all}
 \end{figure}
 
-\begin{figure}[htb]
-\centering
-\caption{Synthetic Control Analysis: Impact on Scripting Language Questions}
-\label{fig:sdid_script}
+\begin{figure}[htpb!]
+    \centering
+    \includesvg[width=1\textwidth]{imgs/stata/sdid_script_trends101.svg}
+    \caption{Synthetic Control Analysis: Impact on Scripting Language Questions}
+    \label{fig:sdid_script}
 \end{figure}
 
 Table \ref{tab:sdid_results} presents the formal SDID estimates:
@@ -182,21 +184,22 @@ Table \ref{tab:sdid_results} presents the formal SDID estimates:
 The SDID approach yields larger treatment effect estimates compared to standard DiD, suggesting that the traditional DiD may underestimate the impact. The SDID results indicate a 26.7\% reduction in overall question volume and a substantial 41.1\% reduction in scripting language questions.
 
 \subsubsection{Event Study Analysis}
-To explore how the treatment effect evolved over time, we conducted a synthetic event study analysis. Figure \ref{fig:event_study} displays the results for scripting language questions.
+We conducted a synthetic event study analysis to explore how the treatment effect evolved over time. Figure \ref{fig:event_study} displays the results for scripting language questions.
 
-\begin{figure}[htb]
-\centering
-\caption{Event Study Analysis for Scripting Language Questions}
-\label{fig:event_study}
+\begin{figure}[htpb!]
+    \centering
+    \includesvg[width=1\textwidth]{imgs/stata/event_study_scripting_languages.svg}
+    \caption{Event Study Analysis for Scripting Language Questions}
+    \label{fig:event_study}
 \end{figure}
 
 The event study reveals several important patterns:
 
 \begin{enumerate}
-\item An immediate and substantial drop in question volume following ChatGPT's release
-\item Persistence of the effect throughout the post-treatment period
-\item Slight intensification of the effect over time, suggesting continued adoption of ChatGPT for programming assistance
-\item No significant pre-treatment effects, supporting the validity of our causal identification strategy
+    \item An immediate and substantial drop in question volume following ChatGPT's release
+    \item Persistence of the effect throughout the post-treatment period
+    \item Slight intensification of the effect over time, suggesting continued adoption of ChatGPT for programming assistance
+    \item No significant pre-treatment effects, supporting the validity of our causal identification strategy
 \end{enumerate}
 
 The lack of significant negative effects before treatment supports the parallel trends assumption and strengthens our causal interpretation.
@@ -205,4 +208,4 @@ The lack of significant negative effects before treatment supports the parallel 
 
 These findings establish a substantial causal impact of ChatGPT on Stack Overflow question volumes, particularly for scripting language questions. The differential impact on scripting languages (41.1\% reduction compared to 26.7\% overall) suggests that ChatGPT has been particularly effective at addressing common programming queries.
 
-This causal foundation motivates our core research question: How has the nature of the remaining questions changed? The dramatic reduction in volume indicates a fundamental shift in how developers seek programming assistance, but it raises important questions about the characteristics of questions that continue to be asked on Stack Overflow despite the availability of ChatGPT. Our subsequent text mining analysis will focus on identifying and quantifying these changes in question content, complexity, and topical focus.
+This causal foundation motivates our core research question: How has the nature of the remaining questions changed? The dramatic reduction in volume indicates a fundamental shift in how developers seek programming assistance. Still, it raises important questions about the characteristics of questions that continue to be asked on Stack Overflow despite the availability of ChatGPT. Our subsequent text mining analysis will identify and quantify these changes in question content, complexity, and topical focus.
