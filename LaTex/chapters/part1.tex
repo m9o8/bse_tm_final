@@ -32,7 +32,14 @@ To identify the causal impact of ChatGPT on Stack Overflow question volumes, we 
 
 The selection of Mathematics, Physics, Superuser, and AskUbuntu as control units was strategically motivated by several considerations. First, these Stack Exchange forums represent technical knowledge domains with structured question patterns similar to Stack Overflow, yet they address distinct subject matters that were less effectively handled by early ChatGPT versions. While ChatGPT demonstrated strong capabilities in programming tasks from its initial release, it exhibited notable limitations in advanced mathematics, physics reasoning, and system-specific troubleshooting—areas central to our control forums. Second, these forums maintain sufficient question volumes to provide statistical power while exhibiting pre-treatment correlation with Stack Overflow question patterns, suggesting similar responsiveness to seasonal trends and external factors affecting forum usage.\\
 
-A critical assumption for traditional difference-in-differences analysis is the parallel trends assumption, which requires that treatment and control groups follow similar trajectories in the absence of treatment. While examining raw counts shows substantial scale differences between forums, log transformation reveals approximately parallel pre-treatment trends, particularly for scripting language questions. This transformation addresses heterogeneity in question volumes and improves the validity of our causal inference by better satisfying the assumption of parallel trends.
+A critical assumption for traditional difference-in-differences analysis is the parallel trends assumption, which requires that treatment and control groups follow similar trajectories in the absence of treatment. While examining raw counts shows substantial scale differences between forums, log transformation reveals approximately parallel pre-treatment trends, particularly for scripting language questions (cf. \ref{fig:paralle_trend_trans}). This transformation addresses heterogeneity in question volumes and improves the validity of our causal inference by better satisfying the assumption of parallel trends.
+
+\begin{figure}[htpb!]
+    \centering
+    \includesvg[width=1\linewidth]{imgs/transformed_trends.svg}
+    \caption{Parallel trends: Weekly raw vs logged question question counts}
+    \label{fig:paralle_trend_trans}
+\end{figure}
 
 \subsubsection{Model Specification}
 Our base difference-in-differences (DiD) model can be expressed as:
