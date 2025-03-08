@@ -102,7 +102,7 @@ twoway (rarea res3 res4 rel_time, lcolor(gs10) fcolor(gs11%50)) ///
 	   note("Average Treatment Effect: `att_rounded' (`pct_change'%)", size(small)) ///
        scheme(s1color)
 * Export the graph
-graph export "../imgs/event_study_base_languages.svg", replace
+graph export "../imgs/stata/event_study_base_languages.svg", replace
 
 //////////////////////////////////////////////////////////////////////////////// Script SO data ////////////////////////////////////////////////////////////////////////////////
 
@@ -207,4 +207,4 @@ twoway (rarea res3 res4 rel_time, lcolor(gs10) fcolor(gs11%50)) ///
 	   note("Average Treatment Effect: `att_rounded' (`pct_change'%)", size(small)) ///
        scheme(s1color)
 * Export the graph
-graph export "../imgs/event_study_scripting_languages.svg", replace
+graph export "../imgs/stata/event_study_scripting_languages.svg", replace
