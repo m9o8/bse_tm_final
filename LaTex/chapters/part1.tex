@@ -1,7 +1,14 @@
 \section{Introduction}
 The advent of Large Language Models (LLMs) has triggered a paradigm shift in how individuals seek and obtain technical information. Stack Overflow, as the premier programming question-and-answer platform, has long been the go-to resource for developers facing coding challenges. However, with the public release of ChatGPT in November 2022, developers gained access to an AI assistant capable of providing immediate, contextual programming guidance—potentially disrupting established knowledge-seeking patterns on specialized forums.\\
 
-This paper investigates how ChatGPT's introduction has altered the landscape of programming questions on Stack Overflow, employing natural language processing (NLP) techniques to identify and quantify changes in question content, complexity, and topical focus. We first establish the causal impact of ChatGPT on Stack Overflow question volumes using difference-in-differences methods, then leverage this foundation to conduct a comprehensive NLP analysis of the changing patterns in developer queries.
+This paper investigates how ChatGPT's introduction has altered the landscape of programming questions on Stack Overflow, employing natural language processing (NLP) techniques to identify and quantify changes in question content, complexity, and topical focus. We first establish the causal impact of ChatGPT on Stack Overflow question volumes using difference-in-differences methods, then leverage this foundation to conduct a comprehensive NLP analysis of the changing patterns in developer queries.\\
+
+However, since we need to handle a vast dataset (approximately 100 GB of data for the entire StackOverflow history) and still 2.5 GB of data or roughly 4 million rows for our selected time frame, we decided to focus on scripting languages (i.e., JavaScript, Python, R, and PHP). This leaves us with approximately 1.3 million questions (or roughly 900 MB of raw data). Moreover, this approach has several other advantages:
+\begin{enumerate}
+    \item We effectively reduce the dataset size and thus also pre-processing times significantly.
+    \item The selected languages are also the top-contributing programming languages on the platform itself and thus representative of the overall trends.
+    \item The chosen languages are those which, assumedly, saw the largest impact since they are high-level languages that earlier ChatGPT versions were especially trained on and good in. 
+\end{enumerate}
 
 \subsection{Research Questions and Approach}
 Our primary research questions ask: 
@@ -11,9 +18,9 @@ Our primary research questions ask:
     \item Can NLP techniques effectively detect and characterize these shifts in question patterns?
 \end{enumerate}
 
-We approach these questions through a two-stage methodology. First, we establish causality through a Synthetic Difference-in-Differences (SDID) framework, quantifying the volumetric impact while controlling for temporal trends. This causal foundation motivates our core NLP analysis, employing \textit{[NLP METHOD PLACEHOLDER]} to analyze the content of millions of Stack Overflow questions before and after ChatGPT's release.\\
+We approach these questions through a two-stage methodology. First, we establish causality through a Synthetic Difference-in-Differences (SDID) framework, quantifying the volumetric impact while controlling for temporal trends following \textcite{arkhangelsky_synthetic_2021} and \textcite{clarke_synthetic_2023}. This causal foundation motivates our core NLP analysis, employing \textit{[NLP METHOD PLACEHOLDER]} to analyze the content of Stack Overflow questions before and after ChatGPT's release.\\
 
-Our dataset spans January 2021 to March 2024, encompassing over \textit{[NUMBER]} questions from Stack Overflow. For the causal analysis component, we incorporate data from four non-programming Stack Exchange forums (Mathematics, Physics, Superuser, and AskUbuntu) as control units. This comprehensive dataset allows us to both establish causality and conduct in-depth textual analysis to characterize the changing nature of developer queries in the age of AI assistants.
+Our dataset spans January 2021 to March 2024, encompassing over 1.3 million questions from Stack Overflow. For the causal analysis component, we incorporate data from four non-programming Stack Exchange forums (Mathematics, Physics, Superuser, and AskUbuntu) as control units (approx. 0.7 million questions). This comprehensive dataset allows us to both establish causality and conduct in-depth textual analysis to characterize the changing nature of developer queries in the age of AI assistants.
 
 \section{Causal Impact Analysis}
 Before diving into our primary NLP analysis, we first establish the causal impact of ChatGPT on Stack Overflow question volumes. This section briefly outlines our causal inference methodology and findings, which provide critical context for interpreting the subsequent NLP results.
@@ -43,7 +50,7 @@ The SDID estimator constructs a synthetic version of Stack Overflow by weighting
     \hat{\tau}_{SDID} = \sum_{t=T_0+1}^T \lambda_t \left( Y_{1t} - \sum_{j=2}^J \omega_j Y_{jt} \right) - \sum_{t=1}^{T_0} \lambda_t \left( Y_{1t} - \sum_{j=2}^J \omega_j Y_{jt} \right)
 \end{equation}
 
-where $Y_{jt}$ represents the log-transformed question count for forum $j$ at time $t$, $\omega_j$ are unit weights, $\lambda_t$ are time weights, $T_0$ is the last pre-treatment period, and unit $j=1$ represents Stack Overflow. We implemented this methodology using both a custom implementation and Microsoft's \href{https://microsoft.github.io/SynapseML/docs/Overview/}{SynapseML} library to ensure robustness of our findings.
+where $Y_{jt}$ represents the log-transformed question count for forum $j$ at time $t$, $\omega_j$ are unit weights, $\lambda_t$ are time weights, $T_0$ is the last pre-treatment period, and unit $j=1$ represents Stack Overflow. We implemented this methodology using a basic custom implementation, Microsoft's \href{https://microsoft.github.io/SynapseML/docs/Overview/}{SynapseML} library, and \textcite{clarke_synthetic_2023} Stata implementation to ensure robustness of our findings.
 
 \subsection{Causal Impact Results}
 
@@ -73,3 +80,129 @@ Table \ref{tab:results} presents the formal estimates of ChatGPT's impact on Sta
 \end{table}
 
 Both implementations yield significant adverse effects, with treatment effect estimates ranging from -0.30 to -0.34 in log units. This translates to approximately a 26-29\% reduction in Stack Overflow question volume attributable to ChatGPT's introduction. This substantial decline motivates our core research question: how has the nature of the remaining questions changed?
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Causal Impact Analysis}
+Before conducting our primary text mining analysis, we first establish the causal impact of ChatGPT on Stack Overflow question volumes. This section outlines our causal inference methodology and findings, which provide critical context for interpreting the subsequent textual analysis results.
+
+\subsection{Synthetic Difference-in-Differences Methodology}
+To identify the causal impact of ChatGPT on Stack Overflow question volumes, we employ a Synthetic Difference-in-Differences (SDID) approach (\cite{arkhangelsky_synthetic_2021}). This methodology combines the strengths of traditional difference-in-differences and synthetic control methods, allowing us to construct a credible counterfactual for Stack Overflow in the absence of ChatGPT.\\
+
+The selection of Mathematics, Physics, Superuser, and AskUbuntu as control units was strategically motivated by several considerations. First, these Stack Exchange forums represent technical knowledge domains with structured question patterns similar to Stack Overflow, yet they address distinct subject matters that were less effectively handled by early ChatGPT versions. While ChatGPT demonstrated strong capabilities in programming tasks from its initial release, it exhibited notable limitations in advanced mathematics, physics reasoning, and system-specific troubleshooting—areas central to our control forums. Second, these forums maintain sufficient question volumes to provide statistical power while exhibiting pre-treatment correlation with Stack Overflow question patterns, suggesting similar responsiveness to seasonal trends and external factors affecting forum usage.\\
+
+A critical assumption for traditional difference-in-differences analysis is the parallel trends assumption, which requires that treatment and control groups follow similar trajectories in the absence of treatment. While examining raw counts shows substantial scale differences between forums, log transformation reveals approximately parallel pre-treatment trends, particularly for scripting language questions. This transformation addresses heterogeneity in question volumes and improves the validity of our causal inference by better satisfying the assumption of parallel trends.
+
+\subsubsection{Model Specification}
+Our base difference-in-differences (DiD) model can be expressed as:
+
+\begin{equation}
+\ln(Q_{it}) = \alpha + \beta \cdot \text{Treated}_i + \gamma \cdot \text{Post}_t + \delta \cdot (\text{Treated}_i \times \text{Post}_t) + \varepsilon_{it}
+\end{equation}
+
+where $\ln(Q_{it})$ represents the log-transformed question count for forum $i$ at time $t$, $\text{Treated}_i$ is an indicator for Stack Overflow, $\text{Post}_t$ is an indicator for periods after ChatGPT's release (November 30, 2022), and $\delta$ captures the treatment effect. We extend this baseline with various time fixed effects to account for temporal patterns.\\
+
+For our synthetic DiD approach, we follow \textcite{arkhangelsky_synthetic_2021}, where the estimator can be expressed as:
+
+\begin{equation}
+\hat{\tau}_{\text{SDID}} = \sum_{t=T_0+1}^T \lambda_t \left( Y_{1t} - \sum_{j=2}^J \omega_j Y_{jt} \right) - \sum_{t=1}^{T_0} \lambda_t \left( Y_{1t} - \sum_{j=2}^J \omega_j Y_{jt} \right)
+\end{equation}
+
+where $Y_{jt}$ represents the log-transformed question count for forum $j$ at time $t$, $\omega_j$ are unit weights, $\lambda_t$ are time weights, $T_0$ is the last pre-treatment period, and unit $j=1$ represents Stack Overflow.\\
+
+We implemented this methodology using \textcite{clarke_synthetic_2023}'s Stata implementation to ensure robustness of our findings, and conducted both static SDID analysis and dynamic event study specifications.
+
+\subsection{Causal Impact Results}
+
+\subsubsection{Base DiD Estimates}
+We begin with standard DiD estimates for both all Stack Overflow questions and specifically for scripting language questions (JavaScript, Python, R, and PHP). Table \ref{tab:did_results} presents these results.
+
+\begin{table}[htpb!]
+    \centering
+    \caption{DiD Estimates of ChatGPT's Impact on Stack Overflow Question Volume}
+    \label{tab:did_results}
+    \begin{tabular}{lcc}
+        \toprule
+            & \multicolumn{2}{c}{Log Question Count} \\
+            \cmidrule(lr){2-3}
+            & All Questions & Scripting Languages \\
+        \midrule
+            Treatment Effect      & $-0.241^{***}$  & $-0.457^{***}$ \\
+            & $(0.034)$       & $(0.034)$ \\
+        \midrule
+            Time FE               & Yes             & Yes \\
+            Observations          & 830             & 830 \\
+        \bottomrule
+            \multicolumn{3}{l}{\footnotesize Standard errors clustered by forum in parentheses} \\
+            \multicolumn{3}{l}{\footnotesize $^{*}p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$} \\
+    \end{tabular}
+\end{table}
+
+These results indicate statistically significant negative effects, with a larger magnitude for scripting language questions. Specifically, while the overall Stack Overflow question volume decreased by approximately 21.4\% ($e^{-0.241}-1$), scripting language questions saw a much larger decline of 36.7\% ($e^{-0.457}-1$). This differential impact suggests that ChatGPT has been particularly effective at addressing programming questions related to these popular scripting languages.
+
+\subsubsection{Synthetic DiD Results}
+To address potential violations of the parallel trends assumption and create a more credible counterfactual, we employ the SDID approach. Figure \ref{fig:sdid_all} visualizes the results for all Stack Overflow questions, while Figure \ref{fig:sdid_script} focuses on scripting language questions.
+
+\begin{figure}[htb]
+\centering
+\caption{Synthetic Control Analysis: Impact on All Stack Overflow Questions}
+\label{fig:sdid_all}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
+\caption{Synthetic Control Analysis: Impact on Scripting Language Questions}
+\label{fig:sdid_script}
+\end{figure}
+
+Table \ref{tab:sdid_results} presents the formal SDID estimates:
+
+\begin{table}[htpb!]
+    \centering
+    \caption{Synthetic DiD Estimates of ChatGPT's Impact on Stack Overflow}
+    \label{tab:sdid_results}
+    \begin{tabular}{lcc}
+        \toprule
+            & \multicolumn{2}{c}{Log Question Count} \\
+            \cmidrule(lr){2-3}
+            & All Questions & Scripting Languages \\
+        \midrule
+            Average Treatment Effect & $-0.311^{***}$ & $-0.529^{***}$ \\
+            & $(0.019)$      & $(0.019)$ \\
+            \midrule
+            Percent Change & $-26.7\%$ & $-41.1\%$ \\
+        \bottomrule
+            \multicolumn{3}{l}{\footnotesize Standard errors based on placebo replications} \\
+            \multicolumn{3}{l}{\footnotesize $^{*}p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$} \\
+    \end{tabular}
+\end{table}
+
+The SDID approach yields larger treatment effect estimates compared to standard DiD, suggesting that the traditional DiD may underestimate the impact. The SDID results indicate a 26.7\% reduction in overall question volume and a substantial 41.1\% reduction in scripting language questions.
+
+\subsubsection{Event Study Analysis}
+To explore how the treatment effect evolved over time, we conducted a synthetic event study analysis. Figure \ref{fig:event_study} displays the results for scripting language questions.
+
+\begin{figure}[htb]
+\centering
+\caption{Event Study Analysis for Scripting Language Questions}
+\label{fig:event_study}
+\end{figure}
+
+The event study reveals several important patterns:
+
+\begin{enumerate}
+\item An immediate and substantial drop in question volume following ChatGPT's release
+\item Persistence of the effect throughout the post-treatment period
+\item Slight intensification of the effect over time, suggesting continued adoption of ChatGPT for programming assistance
+\item No significant pre-treatment effects, supporting the validity of our causal identification strategy
+\end{enumerate}
+
+The lack of significant negative effects before treatment supports the parallel trends assumption and strengthens our causal interpretation.
+
+\subsection{Implications for Text Analysis}
+
+These findings establish a substantial causal impact of ChatGPT on Stack Overflow question volumes, particularly for scripting language questions. The differential impact on scripting languages (41.1\% reduction compared to 26.7\% overall) suggests that ChatGPT has been particularly effective at addressing common programming queries.
+
+This causal foundation motivates our core research question: How has the nature of the remaining questions changed? The dramatic reduction in volume indicates a fundamental shift in how developers seek programming assistance, but it raises important questions about the characteristics of questions that continue to be asked on Stack Overflow despite the availability of ChatGPT. Our subsequent text mining analysis will focus on identifying and quantifying these changes in question content, complexity, and topical focus.
