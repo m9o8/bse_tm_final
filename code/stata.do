@@ -93,7 +93,7 @@ twoway (rarea res3 res4 rel_time, lcolor(gs10) fcolor(gs11%50)) ///
        legend(order(1 "95% CI" 2 "Point Estimate") pos(6) rows(1)) ///
        title("Impact of ChatGPT on Stack Overflow Script-Language Questions", size(medium)) ///
        subtitle("Event Study: Post-Treatment Effects", size(small)) ///
-       xtitle("Realtive time to ChatGPT Release (Nov 30, 2022) in months") ///
+       xtitle("Realtive time to ChatGPT Release (Nov 30, 2022) in weeks") ///
        ytitle("Change in Log Question Count") ///
        yline(0, lcolor(red) lpattern(dash)) ///
        xline(0, lcolor(black) lpattern(solid)) ///
@@ -198,7 +198,7 @@ twoway (rarea res3 res4 rel_time, lcolor(gs10) fcolor(gs11%50)) ///
        legend(order(1 "95% CI" 2 "Point Estimate") pos(6) rows(1)) ///
        title("Impact of ChatGPT on Stack Overflow Script-Language Questions", size(medium)) ///
        subtitle("Event Study: Post-Treatment Effects", size(small)) ///
-       xtitle("Realtive time to ChatGPT Release (Nov 30, 2022) in months") ///
+       xtitle("Realtive time to ChatGPT Release (Nov 30, 2022) in weeks") ///
        ytitle("Change in Log Question Count") ///
        yline(0, lcolor(red) lpattern(dash)) ///
        xline(0, lcolor(black) lpattern(solid)) ///
