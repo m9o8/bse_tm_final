@@ -4,7 +4,7 @@ clear
 //////////////////////////////////////////////////////////////////////////////// All SO data ////////////////////////////////////////////////////////////////////////////////
 
 * Load data
-use "data/stata/so_all.dta"
+use "../data/stata/so_all.dta"
 
 * For better interpretability, add labels
 label variable treated "Stack Overflow"
@@ -65,7 +65,7 @@ sdid log_question_count forum week_index treatment_synthdid, vce(placebo) reps(1
 				  text(, placement(e) color(black) size(small)) ///
 				  note("ATT = `att_rounded' (SE = `se_rounded')" "Equivalent to a `pct_change'% change in question volume", size(small)) ///
 				  scheme(plotplainblind)) ///
-				  graph_export(imgs/stata/sdid_all_, .svg)
+				  graph_export(../imgs/stata/sdid_all_, .svg)
 
 * Synthetic DiD with covariate controls
 sdid log_question_count forum week_index treatment_synthdid, vce(placebo) reps(100) covariates(year_quarter_*) seed(123)
@@ -102,14 +102,14 @@ twoway (rarea res3 res4 rel_time, lcolor(gs10) fcolor(gs11%50)) ///
 	   note("Average Treatment Effect: `att_rounded' (`pct_change'%)", size(small)) ///
        scheme(s1color)
 * Export the graph
-graph export "imgs/event_study_base_languages.svg", replace
+graph export "../imgs/event_study_base_languages.svg", replace
 
 //////////////////////////////////////////////////////////////////////////////// Script SO data ////////////////////////////////////////////////////////////////////////////////
 
 clear
 
 * Load data
-use "data/stata/so_script.dta"
+use "../data/stata/so_script.dta"
 
 * For better interpretability, add labels
 label variable treated "Stack Overflow"
@@ -170,7 +170,7 @@ sdid log_question_count forum week_index treatment_synthdid, vce(placebo) reps(1
 				  text(, placement(e) color(black) size(small)) ///
 				  note("ATT = `att_rounded' (SE = `se_rounded')" "Equivalent to a `pct_change'% change in question volume", size(small)) ///
 				  scheme(plotplainblind)) ///
-				  graph_export(imgs/stata/sdid_script_, .svg)
+				  graph_export(../imgs/stata/sdid_script_, .svg)
 
 * Synthetic DiD with covariate controls
 sdid log_question_count forum week_index treatment_synthdid, vce(placebo) reps(100) covariates(year_quarter_*) seed(123)
@@ -207,4 +207,4 @@ twoway (rarea res3 res4 rel_time, lcolor(gs10) fcolor(gs11%50)) ///
 	   note("Average Treatment Effect: `att_rounded' (`pct_change'%)", size(small)) ///
        scheme(s1color)
 * Export the graph
-graph export "imgs/event_study_scripting_languages.svg", replace
+graph export "../imgs/event_study_scripting_languages.svg", replace
