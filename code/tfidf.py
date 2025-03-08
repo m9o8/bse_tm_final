@@ -11,7 +11,7 @@ if __name__ == "__main__":
     # Assuming you have a dataframe with columns: 'post_id', 'date', 'lemmatized_text'
     # Example of loading data (replace with your actual data loading code)
     df = pl.scan_parquet(
-        "../data/batched_processing/stackoverflow_processed_batch.parquet"
+        "../data/batched_processing/stackoverflow_processed_batch1.parquet"
     )
 
     # Step 2: Define pre and post-treatment periods
@@ -174,7 +174,7 @@ if __name__ == "__main__":
     plt.title("Terms with Biggest Change in TF-IDF Importance After ChatGPT")
     plt.xlabel("Change in TF-IDF Score (Post - Pre)")
     plt.tight_layout()
-    plt.savefig("../imgs/tfidf_change_plot.png")
+    plt.savefig("../imgs/tfidf_change_plot.svg")
     plt.show()
 
     # Save the full vocabulary table
