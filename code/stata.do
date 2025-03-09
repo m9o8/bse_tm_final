@@ -51,7 +51,7 @@ local att_rounded = round(`att_value', 0.001)
 local se_rounded = round(`se_value', 0.001)
 
 * Calculate percent change for interpretation
-local pct_change = round((exp(`att_value')-1)*100, 0.1)
+local pct_change = string((exp(`att_value')-1)*100, "%4.1f")
 
 sdid log_question_count forum week_index treatment_synthdid, vce(placebo) reps(100) seed(123) graph g1on g1_opt(xtitle("") ///
                   title("Synthetic Control: Forum Weights", size(medium)) ///
@@ -68,10 +68,10 @@ sdid log_question_count forum week_index treatment_synthdid, vce(placebo) reps(1
 				  graph_export(../imgs/stata/sdid_all_, .pdf)
 
 * Synthetic DiD with covariate controls
-sdid log_question_count forum week_index treatment_synthdid, vce(placebo) reps(100) covariates(year_quarter_*) seed(123)
+sdid log_question_count forum week_index treatment_synthdid, vce(placebo) reps(100) covariates(year_month_*) seed(123)
 
 * Synthetic Event Study DiD
-sdid_event log_question_count forum week_index treatment_synthdid, vce(placebo) brep(50) placebo(all)
+sdid_event log_question_count forum week_index treatment_synthdid, vce(placebo) brep(100) placebo(all)
 * Extract the results matrix (adjust row numbers based on how many periods you have)
 mat res = e(H)[2..165,1..5]  /* Assuming 65 post-treatment periods from your output */
 
@@ -114,7 +114,7 @@ use "../data/stata/so_script.dta"
 label variable treated "Stack Overflow"
 label variable treatment "Post-ChatGPT Period"
 
-* Make forum categorical
+* Make group categorical
 encode group, generate(group_id)
 
 * Set-up panel structure
@@ -155,10 +155,10 @@ local att_rounded = round(`att_value', 0.001)
 local se_rounded = round(`se_value', 0.001)
 
 * Calculate percent change for interpretation
-local pct_change = round((exp(`att_value')-1)*100, 0.1)
+local pct_change = string((exp(`att_value')-1)*100, "%4.1f")
 
 sdid log_question_count group_id week_index treatment_synthdid, vce(bootstrap) reps(100) seed(123) graph g1on g1_opt(xtitle("") ///
-                  title("Synthetic Control: Forum Weights", size(medium)) ///
+                  title("Synthetic Control: Group Weights", size(medium)) ///
                   xlabel(#12, angle(45) labsize(small)) ///
                   legend(order(1 "Treated (Stack Overflow)" 2 "Synthetic Control")) ///
 				  scheme(plotplainblind)) ///
@@ -172,10 +172,10 @@ sdid log_question_count group_id week_index treatment_synthdid, vce(bootstrap) r
 				  graph_export(../imgs/stata/sdid_script_, .pdf)
 
 * Synthetic DiD with covariate controls
-sdid log_question_count group_id week_index treatment_synthdid, vce(bootstrap) reps(100) covariates(year_quarter_*) seed(123)
+sdid log_question_count group_id week_index treatment_synthdid, vce(bootstrap) reps(100) covariates(year_month_*) seed(123)
 
 * Synthetic Event Study DiD
-sdid_event log_question_count group_id week_index treatment_synthdid, vce(bootstrap) brep(50) placebo(all)
+sdid_event log_question_count group_id week_index treatment_synthdid, vce(bootstrap) brep(100) placebo(all)
 * Extract the results matrix (adjust row numbers based on how many periods you have)
 mat res = e(H)[2..165,1..5]  /* Assuming 65 post-treatment periods from your output */
 
