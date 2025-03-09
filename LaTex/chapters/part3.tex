@@ -36,6 +36,24 @@ The resulting word clouds show no immediate clear trend:
 
 \subsection{Complexity Analysis}
 
-We construct a parsimonious complexity score for forum posts which is composed of 4 key elements: (1) title length, (2) body length, (3) number of tags and (4) number of code, math, or equation length for the respective forums. The choice of this rather simple score is that questions often just use snippets of code or equations, and thus more sophisticated and established equation or code complexity algorithms become unusable. The results are interesting anyways:
+We construct a parsimonious complexity score for forum posts which is composed of 4 key elements: (1) title length, (2) body length, (3) number of tags and (4) number of code, math, or equation length for the respective forums. The reason for choosing this relatively simple score is that questions often use snippets of code or equations. Thus, more sophisticated and established equation or code complexity algorithms become unusable. The results are interesting anyway:
+\begin{multline}\label{eq:cscore_control}
+    \text{Control: Complexity Score}_i = \\
+    \frac{1}{3} \left( \frac{\text{AvgTags}_i - \mu_{\text{AvgTags}}}{\sigma_{\text{AvgTags}}} + \frac{\text{AvgBodyLength}_i - \mu_{\text{AvgBodyLength}}}{\sigma_{\text{AvgBodyLength}}} \right. \\
+    \left. + \frac{\text{AvgTitleLength}_i - \mu_{\text{AvgTitleLength}}}{\sigma_{\text{AvgTitleLength}}} \right)
+\end{multline}
+
+\begin{multline}\label{eq:cscore_treat}
+    \text{Treatment: Complexity Score}_i = \\
+    \frac{1}{4} \left( \frac{\text{AvgTags}_i - \mu_{\text{AvgTags}}}{\sigma_{\text{AvgTags}}} + \frac{\text{AvgCodeLength}_i - \mu_{\text{AvgCodeLength}}}{\sigma_{\text{AvgCodeLength}}} \right. \\
+    \left. + \frac{\text{AvgBodyLength}_i - \mu_{\text{AvgBodyLength}}}{\sigma_{\text{AvgBodyLength}}} + \frac{\text{AvgTitleLength}_i - \mu_{\text{AvgTitleLength}}}{\sigma_{\text{AvgTitleLength}}} \right)
+\end{multline}
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=1\linewidth]{imgs/stackoverflow_vs_rest.svg}
+    \caption{Treatment vs. Control: Question complexity over time}
+    \label{fig:complex}
+\end{figure}
 
 
