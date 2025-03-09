@@ -130,9 +130,7 @@ We conducted a synthetic event study analysis to explore how the treatment effec
 
 Where: $\ln(Q_{it})$ is the log-transformed question count for forum $i$ at time $t$, $Treatment_i$ is the indicator for Stack Overflow (1 for Stack Overflow, 0 otherwise),  $D_{t,k}$ are indicators for being $k$ periods away from the treatment date. Moreover, $K$ is the maximum number of periods before treatment included in the model and $K'$ is the maximum number of periods after treatment included in the model. Lastly, $\gamma_i$ represents forum fixed effects, $\lambda_t$ represents time fixed effects, $\varepsilon_{it}$ is the generic error term.\\
 
-The coefficients $\beta_k$ represent the treatment effect $k$ periods away from the ChatGPT release date, with $k < 0$ for pre-treatment periods and $k > 0$ for post-treatment periods. Typically, one pre-treatment period (often $k = -1$) is omitted as the reference period, normalizing the effect to zero at that point. When implemented in the synthetic DiD framework, each coefficient $\beta_k$ is estimated using the synthetic control method, comparing Stack Overflow to a weighted combination of control forums optimized for that specific time period.
-
-Figure \ref{fig:event_study} displays the results for scripting language questions.
+The coefficients $\beta_k$ represent the treatment effect $k$ periods away from the ChatGPT release date, with $k < 0$ for pre-treatment periods and $k > 0$ for post-treatment periods. Typically, one pre-treatment period (often $k = -1$) is omitted as the reference period, normalizing the effect to zero at that point. When implemented in the synthetic DiD framework, each coefficient $\beta_k$ is estimated using the synthetic control method, comparing Stack Overflow to a weighted combination of control forums optimized for that specific time period. Figure \ref{fig:event_study} displays the results for scripting language questions.
 
 \begin{figure}[H]
     \centering
