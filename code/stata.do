@@ -108,7 +108,7 @@ graph export "../imgs/stata/event_study_base_languages.pdf", replace
 clear
 
 * Load data
-use "../data/stata/so_script1.dta"
+use "../data/stata/so_script.dta"
 
 * For better interpretability, add labels
 label variable treated "Stack Overflow"
