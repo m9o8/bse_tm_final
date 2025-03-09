@@ -108,29 +108,29 @@ graph export "../imgs/stata/event_study_base_languages.pdf", replace
 clear
 
 * Load data
-use "../data/stata/so_script.dta"
+use "../data/stata/so_script1.dta"
 
 * For better interpretability, add labels
 label variable treated "Stack Overflow"
 label variable treatment "Post-ChatGPT Period"
 
 * Make forum categorical
-encode forum, generate(forum_id)
+encode group, generate(group_id)
 
 * Set-up panel structure
-xtset forum_id week_index
+xtset group_id week_index
 
 * Run basic DiD regression
-xtdidregress (log_question_count) (treatment_synthdid), group(forum_id) time(week_index) vce(cluster forum_id)
+xtdidregress (log_question_count) (treatment_synthdid), group(group_id) time(week_index) vce(cluster group_id)
 
 * DiD with week fixed effects
-xtdidregress (log_question_count i.week_index) (treatment_synthdid), group(forum_id) time(week_index) vce(cluster forum_id)
+xtdidregress (log_question_count i.week_index) (treatment_synthdid), group(group_id) time(week_index) vce(cluster group_id)
 
 * DiD with month fixed effects using your month dummies
-xtdidregress (log_question_count year_month_*) (treatment_synthdid), group(forum_id) time(week_index) vce(cluster forum_id)
+xtdidregress (log_question_count year_month_*) (treatment_synthdid), group(group_id) time(week_index) vce(cluster group_id)
 
 * DiD with quarter fixed effects using your quarter dummies
-xtdidregress (log_question_count year_quarter_*) (treatment_synthdid), group(forum_id) time(week_index) vce(cluster forum_id)
+xtdidregress (log_question_count year_quarter_*) (treatment_synthdid), group(group_id) time(week_index) vce(cluster group_id)
 
 
 ********************************************* Synthetic DiD *********************************************
@@ -138,7 +138,7 @@ xtdidregress (log_question_count year_quarter_*) (treatment_synthdid), group(for
 * Synthetic DiD 
 
 * Quietly regress to get estimates for the plot
-quiet sdid log_question_count forum week_index treatment_synthdid, vce(placebo) reps(100) seed(123)
+quiet sdid log_question_count group_id week_index treatment_synthdid, vce(bootstrap) reps(100) seed(123)
 
 * Create a more readable date format from week_start
 * First, ensure week_start is formatted properly
@@ -157,7 +157,7 @@ local se_rounded = round(`se_value', 0.001)
 * Calculate percent change for interpretation
 local pct_change = round((exp(`att_value')-1)*100, 0.1)
 
-sdid log_question_count forum week_index treatment_synthdid, vce(placebo) reps(100) seed(123) graph g1on g1_opt(xtitle("") ///
+sdid log_question_count group_id week_index treatment_synthdid, vce(bootstrap) reps(100) seed(123) graph g1on g1_opt(xtitle("") ///
                   title("Synthetic Control: Forum Weights", size(medium)) ///
                   xlabel(#12, angle(45) labsize(small)) ///
                   legend(order(1 "Treated (Stack Overflow)" 2 "Synthetic Control")) ///
@@ -172,10 +172,10 @@ sdid log_question_count forum week_index treatment_synthdid, vce(placebo) reps(1
 				  graph_export(../imgs/stata/sdid_script_, .pdf)
 
 * Synthetic DiD with covariate controls
-sdid log_question_count forum week_index treatment_synthdid, vce(placebo) reps(100) covariates(year_quarter_*) seed(123)
+sdid log_question_count group_id week_index treatment_synthdid, vce(bootstrap) reps(100) covariates(year_quarter_*) seed(123)
 
 * Synthetic Event Study DiD
-sdid_event log_question_count forum week_index treatment_synthdid, vce(placebo) brep(50) placebo(all)
+sdid_event log_question_count group_id week_index treatment_synthdid, vce(bootstrap) brep(50) placebo(all)
 * Extract the results matrix (adjust row numbers based on how many periods you have)
 mat res = e(H)[2..165,1..5]  /* Assuming 65 post-treatment periods from your output */
 
