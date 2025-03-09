@@ -47,30 +47,35 @@ where $Y_{jt}$ represents the log-transformed question count for forum $j$ at ti
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection{Base DiD Estimates}
-We begin with standard DiD estimates for both all Stack Overflow questions and specifically for scripting language questions (JavaScript, Python, R, and PHP). Table \ref{tab:did_results} presents these results.
+We begin with standard DiD estimates for both all Stack Overflow questions and specifically for scripting language questions (JavaScript, Python, R, and PHP). Table \ref{tab:did_results} presents these base DiD results, while Table \ref{tab:sdid_results} presents the synthetic DiD estimates with and without covariate controls.
 
 \begin{table}[H]
     \centering
-    \caption{DiD Estimates of ChatGPT's Impact on Stack Overflow Question Volume}
+    \caption{Basic DiD Estimates of ChatGPT's Impact on Stack Overflow Question Volume}
     \label{tab:did_results}
     \begin{tabular}{lcc}
         \toprule
-            & \multicolumn{2}{c}{Log Question Count (\equationref{eq:basedid})} \\
+            & \multicolumn{2}{c}{Dependent variable: Log Question Count} \\
             \cmidrule(lr){2-3}
             & All Questions & Scripting Languages \\
         \midrule
-            Treatment Effect & $-0.241^{***}$ & $-0.457^{***}$ \\
-            & $(0.034)$ & $(0.034)$ \\
+            Treatment Effect & $-0.241^{***}$ & $-0.443^{***}$ \\
+            & $(0.034)$ & $(0.054)$ \\
         \midrule
-            Time FE & Yes & Yes \\
-            Observations & 830 & 830 \\
+            Time fixed effects & Yes & Yes \\
+            Group fixed effects & Yes & Yes \\
+            Percent Change & $-21.4\%$ & $-35.8\%$ \\
+        \midrule
+            Observations & 830 & 1,328 \\
+            Number of groups & 5 & 8 \\
+            Pre-treatment periods & 101 & 101 \\
+            Post-treatment periods & 65 & 65 \\
         \bottomrule
-            \multicolumn{3}{l}{\footnotesize Standard errors clustered by forum in parentheses} \\
-            \multicolumn{3}{l}{\footnotesize $^{*}p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$} \\
+            \multicolumn{3}{p{0.95\linewidth}}{\footnotesize \textit{Notes:} Standard errors in parentheses, clustered by forum/group. $^{***}p<0.001$. The dependent variable is log question count. Treatment is defined as the period after ChatGPT's release (November 30, 2022).} \\
     \end{tabular}
 \end{table}
 
-These results indicate statistically significant negative effects, with a larger magnitude for scripting language questions. Specifically, while the overall Stack Overflow question volume decreased by approximately 21.4\% ($e^{-0.241}-1$), scripting language questions saw a much larger decline of 36.7\% ($e^{-0.457}-1$). This differential impact suggests that ChatGPT has been particularly effective at addressing programming questions related to these popular scripting languages.
+These results indicate statistically significant negative effects across all model specifications. For all Stack Overflow questions, the standard DiD model (Table \ref{tab:did_results}) indicates a 21.4\% decrease in question volume, while the synthetic DiD models (Table \ref{tab:sdid_results}, columns 1-2) suggest a larger 26.7\% reduction. For scripting language questions, we observe a much larger decline of 35.8\% in the standard DiD model and 39.5\% in the synthetic DiD model. This differential impact suggests that ChatGPT has been particularly effective at addressing programming questions related to these popular scripting languages.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -98,26 +103,30 @@ To address potential violations of the parallel trends assumption and create a m
 
 \begin{table}[H]
     \centering
-    \caption{Synthetic DiD Estimates of ChatGPT's Impact on Stack Overflow}
+    \caption{Synthetic DiD Estimates of ChatGPT's Impact on Stack Overflow Question Volume}
     \label{tab:sdid_results}
-    \begin{tabular}{lcc}
+    \begin{tabular}{lcccc}
         \toprule
-            & \multicolumn{2}{c}{Log Question Count (\equationref{eq:synthdid})} \\
-            \cmidrule(lr){2-3}
-            & All Questions & Scripting Languages \\
+            & \multicolumn{2}{c}{All Questions} & \multicolumn{2}{c}{Scripting Languages} \\
+            \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+            & (1) & (2) & (3) & (4) \\
         \midrule
-            Average Treatment Effect & $-0.311^{***}$ & $-0.529^{***}$ \\
-            & $(0.019)$      & $(0.019)$ \\
-            \midrule
-            Percent Change & $-26.7\%$ & $-41.1\%$ \\
-            Observations & 830 & 830 \\
+            Treatment Effect & $-0.311^{***}$ & $-0.308^{***}$ & $-0.502^{***}$ & $-0.497^{***}$ \\
+            & $(0.019)$ & $(0.000)$ & $(0.042)$ & $(0.039)$ \\
+        \midrule
+            Month covariates & No & Yes & No & Yes \\
+            Percent Change & $-26.7\%$ & $-26.5\%$ & $-39.5\%$ & $-39.2\%$ \\
+        \midrule
+            Observations & 830 & 830 & 1,328 & 1,328 \\
+            Number of groups & 5 & 5 & 8 & 8 \\
+            Pre-treatment periods & 101 & 101 & 101 & 101 \\
+            Post-treatment periods & 65 & 65 & 65 & 65 \\
         \bottomrule
-            \multicolumn{3}{l}{\footnotesize Standard errors based on placebo replications} \\
-            \multicolumn{3}{l}{\footnotesize $^{*}p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$} \\
+            \multicolumn{5}{p{0.95\linewidth}}{\footnotesize \textit{Notes:} Standard errors in parentheses based on placebo/bootstrap replications (100 repetitions). $^{***}p<0.001$. The dependent variable is log question count. All models include time and group fixed effects. Treatment is defined as the period after ChatGPT's release (November 30, 2022).} \\
     \end{tabular}
 \end{table}
 
-The SDID approach yields larger treatment effect estimates compared to standard DiD, suggesting that the traditional DiD may underestimate the impact. The SDID results indicate a 26.7\% reduction in overall question volume and a substantial 41.1\% reduction in scripting language questions.
+The SDID approach yields larger treatment effect estimates compared to standard DiD, suggesting that the traditional DiD may underestimate the impact. The SDID results indicate a 26.7\% reduction in overall question volume and a substantial 39.5\% reduction in scripting language questions (covariate-adjusted results are 26.5\% and 39.2\% respectively).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -130,7 +139,7 @@ We conducted a synthetic event study analysis to explore how the treatment effec
 
 Where: $\ln(Q_{it})$ is the log-transformed question count for forum $i$ at time $t$, $Treatment_i$ is the indicator for Stack Overflow (1 for Stack Overflow, 0 otherwise),  $D_{t,k}$ are indicators for being $k$ periods away from the treatment date. Moreover, $K$ is the maximum number of periods before treatment included in the model and $K'$ is the maximum number of periods after treatment included in the model. Lastly, $\gamma_i$ represents forum fixed effects, $\lambda_t$ represents time fixed effects, $\varepsilon_{it}$ is the generic error term.\\
 
-The coefficients $\beta_k$ represent the treatment effect $k$ periods away from the ChatGPT release date, with $k < 0$ for pre-treatment periods and $k > 0$ for post-treatment periods. Typically, one pre-treatment period (often $k = -1$) is omitted as the reference period, normalizing the effect to zero at that point. When implemented in the synthetic DiD framework, each coefficient $\beta_k$ is estimated using the synthetic control method, comparing Stack Overflow to a weighted combination of control forums optimized for that specific time period. Figure \ref{fig:event_study} displays the results for scripting language questions.
+The coefficients $\beta_k$ represent the treatment effect $k$ periods away from the ChatGPT release date, with $k < 0$ for pre-treatment periods and $k > 0$ for post-treatment periods. When implemented in the synthetic DiD framework, each coefficient $\beta_k$ is estimated using the synthetic control method, comparing Stack Overflow to a weighted combination of control forums optimized for that specific time period. Figure \ref{fig:event_study} displays the results for scripting language questions, and Table \ref{tab:event_study_results} presents the event study estimates across different time periods.
 
 \begin{figure}[H]
     \centering
@@ -139,26 +148,40 @@ The coefficients $\beta_k$ represent the treatment effect $k$ periods away from 
     \label{fig:event_study}
 \end{figure}
 
-The event study reveals several important patterns: (1) The pre-treatment coefficients (points to the left of time 0) are clearly not centered exactly at zero. There appears to be a slight negative trend in the pre-treatment period, with most estimates falling between -0.2 and -0.1. However, most pre-treatment point estimates have confidence intervals that include zero (particularly in the periods closer to treatment). (2) An immediate and substantial drop in question volume following ChatGPT's release. (3) Persistence of the effect throughout the post-treatment period. (4) Slight intensification of the effect over time, suggesting continued adoption of ChatGPT for programming assistance.
+\begin{table}[H]
+    \centering
+    \caption{Event Study: Post-Treatment Effects Over Time for Scripting Languages}
+    \label{tab:event_study_results}
+    \begin{tabular}{lccc}
+    \toprule
+    Time Period & Estimate & SE & 95\% CI \\
+    \midrule
+    Week 1-4 after treatment   & -0.335 & 0.079 & [-0.490, -0.180] \\
+    Week 5-12 after treatment  & -0.267 & 0.084 & [-0.432, -0.102] \\
+    Week 13-24 after treatment & -0.482 & 0.080 & [-0.639, -0.325] \\
+    Week 25-36 after treatment & -0.577 & 0.082 & [-0.738, -0.416] \\
+    Week 37-48 after treatment & -0.644 & 0.077 & [-0.795, -0.493] \\
+    Week 49-60 after treatment & -0.718 & 0.081 & [-0.877, -0.559] \\
+    Week 61-65 after treatment & -0.739 & 0.077 & [-0.890, -0.588] \\
+    \midrule
+    Overall treatment effect & -0.502 & 0.073 & [-0.646, -0.358] \\
+    \bottomrule
+    \multicolumn{4}{p{0.95\linewidth}}{\footnotesize \textit{Notes:} Results from synthetic DiD event study analysis with bootstrapped standard errors (100 repetitions). Estimates show the change in log question count for Stack Overflow scripting language questions relative to the synthetic control group across different post-treatment time periods. All effects are statistically significant at the 0.1\% level.} \\
+    \end{tabular}
+\end{table}
+
+The event study reveals several important patterns: (1) An immediate and substantial drop in question volume following ChatGPT's release. (2) Persistence of the effect throughout the post-treatment period. (3) Intensification of the effect over time, with the most recent period showing the strongest effect, suggesting continued adoption of ChatGPT for programming assistance.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Robustness and Potential Confounders}
 
-The stability of our DiD estimates across different time fixed effect specifications provides evidence of robustness. However, we must acknowledge potential confounders that could threaten causal identification:
-
-\begin{enumerate}
-    \item \textbf{Concurrent AI releases:} The period following ChatGPT's release saw the introduction of other AI models and tools. While these likely had smaller impacts than ChatGPT given its widespread adoption, they could contribute to the observed effects. Our time fixed effects partially address this by controlling for common temporal shocks.
-    \item \textbf{Forum-specific trends:} Although we control for time-invariant forum characteristics and common time shocks, forum-specific trends could potentially confound our results. The synthetic control approach helps mitigate this concern by creating a weighted combination of control units that better approximates the counterfactual.
-    \item \textbf{Spillover effects:} Users might have reduced their activity across multiple Stack Exchange forums after discovering ChatGPT, creating spillover effects that could attenuate our estimates. If present, this would mean our results are conservative.
-\end{enumerate}
-
-Despite these considerations, the effects' magnitude, immediacy, and persistence, particularly for scripting languages, strongly suggest a causal relationship between ChatGPT's introduction and the observed decline in Stack Overflow question volume.
+The stability of our estimates across different model specifications provides strong evidence of robustness. Adding monthly covariates yields nearly identical treatment effects for both all questions (-0.308 vs. -0.311) and scripting languages (-0.497 vs. -0.502). While our methodology addresses many potential confounders, some limitations remain: (1) concurrent AI tool releases may have contributed to the observed effects, though likely to a lesser extent than ChatGPT; (2) despite controlling for time-invariant forum characteristics and common shocks, forum-specific trends could still influence results; and (3) potential spillover effects may exist if users reduced activity across multiple Stack Exchange forums after discovering ChatGPT. Despite these considerations, the magnitude, immediacy, and persistence of effects—particularly for scripting languages—strongly suggest a causal relationship between ChatGPT's introduction and the decline in Stack Overflow question volume.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Implications for Text Analysis}
 
-These findings establish a causal impact of ChatGPT on Stack Overflow question volumes, particularly for scripting language questions. The differential impact on scripting languages (41.1\% reduction compared to 26.7\% overall) suggests that ChatGPT has been particularly effective at addressing common programming queries.
+These findings establish a causal impact of ChatGPT on Stack Overflow question volumes, particularly for scripting language questions. The differential impact on scripting languages (approximately 39\% reduction compared to 27\% overall) suggests that ChatGPT has been particularly effective at addressing common programming queries.
 
 This causal foundation motivates our core research question: How has the nature of the remaining questions changed? The dramatic reduction in volume indicates a fundamental shift in how developers seek programming assistance. Still, it raises important questions about the characteristics of questions that continue to be asked on Stack Overflow despite the availability of ChatGPT. Our subsequent text mining analysis will identify and quantify these changes in question content, complexity, and topical focus.
