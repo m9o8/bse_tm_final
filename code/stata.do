@@ -97,7 +97,6 @@ twoway (rarea res3 res4 rel_time, lcolor(gs10) fcolor(gs11%50)) ///
        ytitle("Change in Log Question Count") ///
        yline(0, lcolor(red) lpattern(dash)) ///
        xline(0, lcolor(black) lpattern(solid)) ///
-       ylabel(-1(.2)0.2, format(%9.1f)) ///
        xlabel(-100(15)65) ///
 	   note("Average Treatment Effect: `att_rounded' (`pct_change'%)", size(small)) ///
        scheme(s1color)
@@ -202,7 +201,6 @@ twoway (rarea res3 res4 rel_time, lcolor(gs10) fcolor(gs11%50)) ///
        ytitle("Change in Log Question Count") ///
        yline(0, lcolor(red) lpattern(dash)) ///
        xline(0, lcolor(black) lpattern(solid)) ///
-       ylabel(-1(.2)0.2, format(%9.1f)) ///
        xlabel(-100(15)65) ///
 	   note("Average Treatment Effect: `att_rounded' (`pct_change'%)", size(small)) ///
        scheme(s1color)
