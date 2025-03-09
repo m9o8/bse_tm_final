@@ -11,4 +11,31 @@ While our NLP analysis remains in progress, our causal findings suggest substant
 
 This dramatic weakening of correlations (from 0.76-0.87 to 0.18-0.65) suggests that ChatGPT has reduced question volume but potentially altered the relationship between programming questions and those in other knowledge domains. This finding motivates our hypothesis that the content and nature of Stack Overflow questions have fundamentally changed in the post-ChatGPT era -— a hypothesis we explore through our NLP analysis in the following sections.
 
-\textit{[PRELIMINARY NLP FINDINGS PLACEHOLDER - Will include initial topic distribution shifts, complexity changes, and other preliminary textual analysis results]}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Question complexity impact}
+
+The average treatment effect on the treated (ATT) indicates a significant increase in our standardized complexity measure of 1.001 standard deviations (SE = 0.064, p < 0.001), as shown in Figure \ref{fig:synthetic_control}. This effect remains robust when including time-fixed effects and various covariates (ATT = 0.957, SE = 0.060).  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{}
+    \caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+Our complexity scores (cf. \equationref{eq:cscore_control} and \equationref{eq:cscore_treat}), capture multiple dimensions of question sophistication, providing a comprehensive measure of question complexity.
+
+The traditional DiD regression also confirms this effect (coefficient = 0.929, p < 0.001), with consistent findings across various model specifications. Figure \ref{fig:event_study} presents the event study results, demonstrating both the immediate impact following ChatGPT's introduction and the persistence of this effect throughout the post-treatment period. 
+
+\subsection{Temporal Patterns and Forum Weights}
+
+The synthetic control approach assigns optimal weights to control forums to construct the counterfactual, as illustrated in Figure \ref{fig:group_weights}. Notably, these weights ensure that pre-treatment trends between treatment and synthetic control groups are parallel, satisfying a key assumption of the DiD methodology.
+
+The event study in Figure \ref{fig:event_study} reveals that the effect was immediate, with question complexity increasing sharply in the weeks following ChatGPT's release. This effect has persisted and even strengthened over time, suggesting a fundamental shift in how developers utilize Stack Overflow rather than a temporary adjustment.
+
+\subsection{Interpretation}
+
+These findings support our hypothesis that ChatGPT has fundamentally altered information-seeking behavior in programming communities. Developers now appear to reserve simpler questions for ChatGPT while turning to Stack Overflow for more complex programming challenges that require human expertise. The magnitude of this effect—approximately one standard deviation increase in question complexity—represents a substantial shift in the types of questions that users bring to Stack Overflow.
+
+This empirical evidence points to a complementary relationship between AI-powered assistants and human-moderated Q&A forums, with each platform serving distinct informational needs within the programming community. Stack Overflow appears to be evolving toward a repository for more complex programming questions, while simpler queries may be increasingly handled through interaction with large language models like ChatGPT.
