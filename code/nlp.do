@@ -11,14 +11,14 @@ encode group, generate(group_id)
 xtset group_id week_index
 
 * Run basic DiD regression
-xtdidregress (score) (treatment_synthdid), group(group_id) time(week_index) vce(cluster group)
+xtdidregress (mean_score) (treatment_synthdid), group(group_id) time(week_index) vce(cluster group)
 
 ********************************************* Synthetic DiD *********************************************
 
 * Synthetic DiD 
 
 * Quietly regress to get estimates for the plot
-quiet sdid score group_id week_index treatment_synthdid, vce(bootstrap) reps(100) seed(123)
+quiet sdid mean_score group_id week_index treatment_synthdid, vce(bootstrap) reps(100) seed(123)
 
 * Create a more readable date format from week_start
 * First, ensure week_start is formatted properly
@@ -34,7 +34,7 @@ local se_value = e(se)
 local att_rounded = round(`att_value', 0.001)
 local se_rounded = round(`se_value', 0.001)
 
-sdid score group_id week_index treatment_synthdid, vce(bootstrap) reps(100) seed(123) graph g1on g1_opt(xtitle("") ///
+sdid mean_score group_id week_index treatment_synthdid, vce(bootstrap) reps(100) seed(123) graph g1on g1_opt(xtitle("") ///
                   title("Synthetic Control: Group Weights", size(medium)) ///
                   xlabel(#12, angle(45) labsize(small)) ///
                   legend(order(1 "Treated (Stack Overflow)" 2 "Synthetic Control")) ///
@@ -49,10 +49,10 @@ sdid score group_id week_index treatment_synthdid, vce(bootstrap) reps(100) seed
 				  graph_export(../imgs/stata/sdid_nlp_, .pdf)
 
 * Synthetic DiD with covariate controls
-sdid score group week_index treatment_synthdid, vce(bootstrap) reps(100) covariates(year_month_*) seed(123)
+sdid mean_score group week_index treatment_synthdid, vce(bootstrap) reps(100) covariates(year_month_*) seed(123)
 
 * Synthetic Event Study DiD
-sdid_event score group week_index treatment_synthdid, vce(bootstrap) brep(100) placebo(all)
+sdid_event mean_score group week_index treatment_synthdid, vce(bootstrap) brep(100) placebo(all)
 * Extract the results matrix (adjust row numbers based on how many periods you have)
 mat res = e(H)[2..165,1..5]  /* Assuming 65 post-treatment periods from your output */
 
@@ -75,7 +75,7 @@ twoway (rarea res3 res4 rel_time, lcolor(gs10) fcolor(gs11%50)) ///
        title("Impact of ChatGPT on Script-Language Question Complexity", size(medium)) ///
        subtitle("Event Study: Post-Treatment Effects", size(small)) ///
        xtitle("Realtive time to ChatGPT Release (Nov 30, 2022) in weeks") ///
-       ytitle("Change in Log Question Count") ///
+       ytitle("Change in Complexity Scores") ///
        yline(0, lcolor(red) lpattern(dash)) ///
        xline(0, lcolor(black) lpattern(solid)) ///
        xlabel(-100(15)65) ///
