@@ -36,16 +36,11 @@ The resulting word clouds show no immediate clear trend:
 
 \subsection{Complexity Analysis}
 
-We construct a parsimonious complexity score for forum posts which is composed of 4 key elements: (1) title length, (2) body length, (3) number of tags and (4) number of code, math, or equation length for the respective forums. The reason for choosing this relatively simple score is that questions often use snippets of code or equations. Thus, more sophisticated and established equation or code complexity algorithms become unusable. The results are interesting anyway:
-\begin{multline}\label{eq:cscore_control}
-    \text{Control: Complexity Score}_i = \\
-    \frac{1}{3} \left( \frac{\text{AvgTags}_i - \mu_{\text{AvgTags}}}{\sigma_{\text{AvgTags}}} + \frac{\text{AvgBodyLength}_i - \mu_{\text{AvgBodyLength}}}{\sigma_{\text{AvgBodyLength}}} \right. \\
-    \left. + \frac{\text{AvgTitleLength}_i - \mu_{\text{AvgTitleLength}}}{\sigma_{\text{AvgTitleLength}}} \right)
-\end{multline}
+We construct a parsimonious complexity score for forum posts which is composed of 4 key elements: (1) title length, (2) body length, (3) number of tags and (4) length of technical expressions (i.e. code, or equation length for the respective forums).\footnote{We used different metrics appropriate to each forum's content: code length was measured for Stack Overflow, Superuser, and Askubuntu, while equation length was used for Mathematics and Physics. This distinction reflects the content patterns in our data, as Physics and Mathematics questions contained code in fewer than 5\% of posts, while the technology-focused forums rarely contained equations.} The reason for choosing this relatively simple score is that questions often use snippets of code or equations. Thus, more sophisticated and established equation or code complexity algorithms become unusable. The results are interesting anyway:
 
-\begin{multline}\label{eq:cscore_treat}
+\begin{multline}\label{eq:cscore}
     \text{Treatment: Complexity Score}_i = \\
-    \frac{1}{4} \left( \frac{\text{AvgTags}_i - \mu_{\text{AvgTags}}}{\sigma_{\text{AvgTags}}} + \frac{\text{AvgCodeLength}_i - \mu_{\text{AvgCodeLength}}}{\sigma_{\text{AvgCodeLength}}} \right. \\
+    \frac{1}{4} \left( \frac{\text{AvgTags}_i - \mu_{\text{AvgTags}}}{\sigma_{\text{AvgTags}}} + \frac{\text{AvgTechExprLength}_i - \mu_{\text{AvgTechExprLength}}}{\sigma_{\text{AvgTechExprLength}}} \right. \\
     \left. + \frac{\text{AvgBodyLength}_i - \mu_{\text{AvgBodyLength}}}{\sigma_{\text{AvgBodyLength}}} + \frac{\text{AvgTitleLength}_i - \mu_{\text{AvgTitleLength}}}{\sigma_{\text{AvgTitleLength}}} \right)
 \end{multline}
 
