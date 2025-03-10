@@ -61,3 +61,7 @@ This project is being developed as part of the Introduction to Text Mining and N
 ## License
 
 [MIT License](LICENSE)
+
+## Miscaleanous
+
+- Command to convert Stata PDFs to SVGs: `inkscape --export-type="svg" sdid_nlp_trends102.pdf`
