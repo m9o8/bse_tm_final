@@ -51,8 +51,13 @@ sdid mean_score group_id week_index treatment_synthdid, vce(bootstrap) reps(100)
 * Synthetic DiD with covariate controls
 sdid mean_score group week_index treatment_synthdid, vce(bootstrap) reps(100) covariates(year_month_*) seed(123)
 
+local month_vars ""
+foreach var of varlist year_month_* {
+    local month_vars "`month_vars' `var'"
+}
+
 * Synthetic Event Study DiD
-sdid_event mean_score group week_index treatment_synthdid, vce(bootstrap) brep(100) placebo(all)
+sdid_event mean_score group week_index treatment_synthdid, covariates(`month_vars') vce(bootstrap) brep(100) placebo(all)
 * Extract the results matrix (adjust row numbers based on how many periods you have)
 mat res = e(H)[2..165,1..5]  /* Assuming 65 post-treatment periods from your output */
 
