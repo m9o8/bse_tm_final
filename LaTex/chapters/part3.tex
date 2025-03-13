@@ -29,14 +29,9 @@ The resulting word clouds show no immediate clear trend:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Topic Modeling}
-\textit{[TOPIC MODELING PLACEHOLDER - Will describe topic modeling approach (e.g., LDA), parameter selection, and validation strategies]}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \subsection{Complexity Analysis}
 
-We construct a parsimonious complexity score for forum posts which is composed of 4 key elements: (1) title length, (2) body length, (3) number of tags and (4) length of technical expressions (i.e. code, or equation length for the respective forums):\footnote{We used different metrics appropriate to each forum's content: code length was measured for Stack Overflow, Superuser, and Askubuntu, while equation length was used for Mathematics and Physics. This distinction reflects the content patterns in our data, as Physics and Mathematics questions contained code in fewer than 5\% of posts, while the technology-focused forums rarely contained equations.}
+We construct a parsimonious complexity score for forum posts which is composed of 4 key elements: (1) title length, (2) body length, (3) number of tags and (4) length of technical expressions (i.e. code, or equation length for the respective forums)\footnote{We used different metrics appropriate to each forum's content: code length was measured for Stack Overflow, Superuser, and Askubuntu, while equation length was used for Mathematics and Physics. This distinction reflects the content patterns in our data, as Physics and Mathematics questions contained code in fewer than 5\% of posts, while the technology-focused forums rarely contained equations.}:
 
 \begin{multline}\label{eq:cscore}
     \text{Complexity Score}_{i,t} = \\ 
@@ -44,7 +39,7 @@ We construct a parsimonious complexity score for forum posts which is composed o
     \left. + \frac{\text{BodyLength}_{i,t} - \mu_{\text{BodyLength}}}{\sigma_{\text{BodyLength}}} + \frac{\text{TitleLength}_{i,t} - \mu_{\text{TitleLength}}}{\sigma_{\text{TitleLength}}} \right)
 \end{multline}
 
-The reason for choosing this relatively simple score is that questions often use snippets of code or equations. Thus, more sophisticated and established equation or code complexity algorithms become unusable. The results. presented in \tableref{fig:complex} are intriguing anyway:
+\equationref{eq:cscore} thus shows the complexity score of forum $i$ in time (week) $t$. The reason for choosing this relatively simple score is that questions often use snippets of code or equations. Thus, more sophisticated and established equation or code complexity algorithms become unusable. \tableref{fig:complex} presents the results over time:
 
 \begin{figure}[H]
     \centering
@@ -53,4 +48,10 @@ The reason for choosing this relatively simple score is that questions often use
     \label{fig:complex}
 \end{figure}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsection{Term Frequencies}
+
+Conclusively, and to better understand the nature of the complexity changes identified in our Synthetic DiD analysis, we then examine shifts in term importance using word frequency analysis. \figureref{} shows percentage changes in term importance before and after ChatGPT's introduction.\\
+
+To ensure observed term changes represent genuine shifts rather than random variation, we test statistical significance using bootstrapped confidence intervals and permutation tests ($\alpha = 0.05$) -- terms marked with an asterisk (*) in \figureref{} show statistically significant changes.
