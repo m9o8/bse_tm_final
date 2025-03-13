@@ -1,0 +1,94 @@
+flowchart TD
+    %% Data Sources
+    source[Stack Exchange 7z Archives] --> extraction
+
+    %% Main Process Flow
+    subgraph extraction[1.Data Extraction  - 1_data_extraction.py]
+        extract["process_stack_data()"] --> so[Stack Overflow Data]
+        extract --> math[Mathematics Data]
+        extract --> physics[Physics Data]
+        extract --> superuser[SuperUser Data]
+        extract --> askubuntu[AskUbuntu Data]
+        
+        %% Stack Overflow filtering
+        so --> so_all["All SO Questions (stackoverflow.parquet)"]
+        so --> so_script["Script Languages Only (stackoverflow_script.parquet)"]
+    end
+
+    %% Data Preparation
+    subgraph preparation[2.Data Preparation - 2_eda.py]
+        so_all & so_script & math & physics & superuser & askubuntu --> prepare["prepare_forum_data()"]
+        prepare --> weekly[Weekly Aggregated Data]
+        weekly --> transform["transform_for_parallel()"]
+        transform --> parallel_data[Transformed Data for Parallel Trends]
+        
+        %% Data export for statistical analysis
+        parallel_data --> stata_script["Script Questions .dta (so_all.dta)"]
+        parallel_data --> stata_combined["All Questions .dta (so_script.dta)"]
+    end
+
+    %% Preprocessing
+    subgraph preprocessing[3.Preprocessing]
+        subgraph so_preprocess[3.1a Stack Overflow - preprocessing_batch_so.py]
+            so_script --> extract_so[Extract Text & Code]
+            extract_so --> batch_so[Batch Processing]
+            batch_so --> preprocess_so[Text Preprocessing]
+            preprocess_so --> merge_so[Merge Batches]
+            merge_so --> so_processed[SO Processed Data]
+        end
+        
+        subgraph other_preprocess[3.1b Other Forums - preprocessing_other.py]
+            math & physics & superuser & askubuntu --> combine_others[Combine Non-SO Forums]
+            combine_others --> extract_other[Extract Text & Tech Expressions]
+            extract_other --> batch_other[Batch Processing]
+            batch_other --> preprocess_other[Text Preprocessing]
+            preprocess_other --> merge_other[Merge Batches]
+            merge_other --> other_processed[Other Forums Processed Data]
+        end
+    end
+
+    %% Text Analysis
+    subgraph text_analysis[3.2-3.3 Text Analysis]
+        so_processed --> metrics[Calculate Text Metrics\n3_2_text_metrics.py]
+        other_processed --> metrics
+        
+        metrics --> complexity[Complexity Score]
+        complexity --> nlp_data["NLP Metrics .dta (nlp.dta)"]
+        
+        so_processed --> tfidf[TF-IDF Analysis\n3_3_processing.py]
+        tfidf --> term_freq[Term Frequency Analysis]
+        term_freq --> term_significance[Statistical Term Significance]
+    end
+
+    %% Statistical Analysis
+    subgraph stats[4.Statistical Analysis in Stata]
+        subgraph volume[4.1 Volume Analysis - 4_1_stata.do]
+            stata_script --> did_volume[DiD Analysis]
+            stata_combined -->
+            did_volume --> synthdid_volume[Synthetic DiD]
+            synthdid_volume --> event_volume[Event Study]
+        end
+        
+        subgraph complexity_analysis[4.2 Complexity Analysis - 4_2_nlp.do]
+            nlp_data --> did_nlp[DiD Analysis]
+            did_nlp --> synthdid_nlp[Synthetic DiD]
+            synthdid_nlp --> event_nlp[Event Study]
+        end
+    end
+
+    %% Results Flow
+    term_significance --> terms_results[Term Change Results]
+    event_volume --> volume_results[Volume Impact Results]
+    event_nlp --> complexity_results[Complexity Impact Results]
+    
+    %% Final Integration
+    terms_results & volume_results & complexity_results --> final[Final ChatGPT Impact Analysis]
+
+    %% Style
+    classDef process fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef data fill:#bbf,stroke:#333,stroke-width:1px;
+    classDef result fill:#bfb,stroke:#333,stroke-width:2px;
+    
+    class extract,prepare,transform,extract_so,extract_other,preprocess_so,preprocess_other,metrics,tfidf,did_volume,did_nlp,synthdid_volume,synthdid_nlp process;
+    class so,math,physics,superuser,askubuntu,so_all,so_script,weekly,parallel_data,stata_script,stata_combined,so_processed,other_processed,complexity,nlp_data,term_freq data;
+    class terms_results,volume_results,complexity_results,final result;
