@@ -50,8 +50,7 @@ We construct a parsimonious complexity score for forum posts which is composed o
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Term Frequencies}
+\subsection{Term Importance Analysis}
+To understand the nature of the complexity changes identified in our Synthetic DiD analysis, we examine shifts in term importance using TF-IDF (Term Frequency-Inverse Document Frequency) analysis. Unlike raw term frequency, TF-IDF weights terms based on their relative importance within documents and across the corpus, highlighting discriminative terms while downweighting common ones. Figure \ref{fig:tfidf} shows the significant changes in term importance before and after ChatGPT's introduction.\\
 
-Conclusively, and to better understand the nature of the complexity changes identified in our Synthetic DiD analysis, we then examine shifts in term importance using word frequency analysis. \figureref{} shows percentage changes in term importance before and after ChatGPT's introduction.\\
-
-To ensure observed term changes represent genuine shifts rather than random variation, we test statistical significance using bootstrapped confidence intervals and permutation tests ($\alpha = 0.05$) -- terms marked with an asterisk (*) in \figureref{} show statistically significant changes.
+To ensure observed term changes represent genuine shifts rather than random variation, we applied statistical testing using bootstrapped confidence intervals (100 replications) and permutation tests ($\alpha = 0.05$). This approach allowed us to identify statistically significant changes in term importance that correlate with the introduction of ChatGPT.

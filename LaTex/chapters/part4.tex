@@ -88,12 +88,19 @@ The event study in Figure \ref{fig:cscore_event_study} reveals that while there 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Analysis of Question Content Changes}
+\begin{figure}[H]
+    \centering
+    \includesvg[width=1\linewidth]{imgs/term_significance_plot.svg}
+    \caption{Top 10 increases and decreases in TF-IDF scores after ChatGPT's introduction}
+    \label{fig:tfidf}
+\end{figure}
 
-The results reveal distinct patterns consistent with our complexity findings. Terms related to troubleshooting specific issues (e.g., "encounter," "try change," "configuration") showed substantial increases (...), while terms associated with basic programming concepts ("array," "loop," "dataframe") and learning requests ("understand," "help") decreased significantly (...).\\
+The TF-IDF analysis reveals patterns consistent with our complexity findings. Terms related to troubleshooting and debugging (e.g., \enquote{error}, \enquote{issue}, \enquote{expect}), as well as technical infrastructure terms (\enquote{version}, \enquote{package}, \enquote{library}) showed significant increases in importance, while terms associated with basic programming concepts (\enquote{array}, \enquote{loop}, \enquote{list}) decreased significantly. These shifts in term importance indicate that ChatGPT has likely absorbed simpler programming questions, leaving Stack Overflow to serve more complex, specific troubleshooting needs.\\
 
-Particularly notable is the sharp increase in image-related terms ("enter image," "image description"), suggesting users increasingly turn to Stack Overflow for visual problems that text-based AI assistants may struggle with. These findings support our hypothesis that ChatGPT has shifted simpler programming questions away from Stack Overflow, leaving the platform with more complex, specific troubleshooting questions.\\
+Notably, conversational terms (\enquote{like}, \enquote{want}, etc.) also decreased in importance, suggesting a shift toward more technical, problem-specific language in post-ChatGPT questions. This aligns with our hypothesis that questions remaining on Stack Overflow have become more specialized and technical in nature.\\
 
-Thus, the linguistic changes revealed through our TF-IDF analysis provide qualitative context for the quantitative complexity increases observed in our Synthetic DiD model. The notable shift toward troubleshooting terminology coupled with decreased prevalence of basic programming terms suggests ChatGPT has fundamentally altered the nature of questions on Stack Overflow, not just their volume or overall complexity.
+The linguistic changes revealed through our TF-IDF analysis provide qualitative context for the quantitative complexity increases observed in our Synthetic DiD model. The notable shift toward troubleshooting terminology coupled with decreased prevalence of basic programming terms suggests that ChatGPT has fundamentally altered the nature of questions on Stack Overflow, not just their volume or overall complexity.
+The key improvements:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
