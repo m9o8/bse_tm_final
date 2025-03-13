@@ -9,7 +9,7 @@ While our NLP analysis remains in progress, our causal findings suggest substant
     % Figure 3 reference
 \end{figure}
 
-This dramatic weakening of correlations (from 0.76-0.87 to 0.18-0.65) suggests that ChatGPT has reduced question volume but potentially altered the relationship between programming questions and those in other knowledge domains. This finding motivates our hypothesis that the content and nature of Stack Overflow questions have fundamentally changed in the post-ChatGPT era -— a hypothesis we explore through our NLP analysis in the following sections.
+This dramatic weakening of correlations (from 0.76-0.87 to 0.18-0.65) suggests that ChatGPT has reduced question volume but potentially altered the relationship between programming questions and those in other knowledge domains. This finding motivates our hypothesis that the content and nature of Stack Overflow questions have fundamentally changed in the post-ChatGPT era -- a hypothesis we further strengthened by the following results of complexity scores and term frequencies.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -84,6 +84,18 @@ Our complexity scores (cf. \equationref{eq:cscore}), capture multiple dimensions
 \end{table}
 
 The event study in Figure \ref{fig:cscore_event_study} reveals that while there was an initial positive but non-significant effect in the first twelve weeks after ChatGPT's release, this effect became statistically significant and stronger from week 13 onward. The impact has persisted and strengthened over time, with the largest effect observed in the most recent period (weeks 61-65), suggesting a fundamental shift in how developers utilize Stack Overflow rather than a temporary adjustment.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Analysis of Question Content Changes}
+
+The results reveal distinct patterns consistent with our complexity findings. Terms related to troubleshooting specific issues (e.g., "encounter," "try change," "configuration") showed substantial increases (...), while terms associated with basic programming concepts ("array," "loop," "dataframe") and learning requests ("understand," "help") decreased significantly (...).\\
+
+Particularly notable is the sharp increase in image-related terms ("enter image," "image description"), suggesting users increasingly turn to Stack Overflow for visual problems that text-based AI assistants may struggle with. These findings support our hypothesis that ChatGPT has shifted simpler programming questions away from Stack Overflow, leaving the platform with more complex, specific troubleshooting questions.\\
+
+Thus, the linguistic changes revealed through our TF-IDF analysis provide qualitative context for the quantitative complexity increases observed in our Synthetic DiD model. The notable shift toward troubleshooting terminology coupled with decreased prevalence of basic programming terms suggests ChatGPT has fundamentally altered the nature of questions on Stack Overflow, not just their volume or overall complexity.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Interpretation}
 

@@ -131,22 +131,29 @@ The SDID approach yields larger treatment effect estimates compared to standard 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection{Event Study Analysis}
-We conducted a synthetic event study analysis to explore how the treatment effect evolved over time, following \textcite{ciccia_short_2024}:
+We conduct a synthetic event study analysis to explore how the treatment effect evolved over time, following \textcite{ciccia_short_2024}. Unlike standard event study approaches, the synthetic difference-in-differences (SDID) event study estimator can be expressed as:
 
 \begin{equation}
-    \ln(Q_{it}) = \sum_{k=-K}^{K'} \beta_k (Treatment_i \times D_{t,k}) + \gamma_i + \lambda_t + \varepsilon_{it}
+    \hat{\tau}^{sdid}_{\ell} = \sum_{a \in A_{\ell}} \frac{N^a_{tr}}{N^{\ell}_{tr}} \hat{\tau}^{sdid}_{a,\ell}
 \end{equation}
 
-Where: $\ln(Q_{it})$ is the log-transformed question count for forum $i$ at time $t$, $Treatment_i$ is the indicator for Stack Overflow (1 for Stack Overflow, 0 otherwise),  $D_{t,k}$ are indicators for being $k$ periods away from the treatment date. Moreover, $K$ is the maximum number of periods before treatment included in the model and $K'$ is the maximum number of periods after treatment included in the model. Lastly, $\gamma_i$ represents forum fixed effects, $\lambda_t$ represents time fixed effects, $\varepsilon_{it}$ is the generic error term.\\
+where $\hat{\tau}^{sdid}_{a,\ell}$ represents the dynamic treatment effect $\ell$ periods after treatment for cohort $a$:
 
-The coefficients $\beta_k$ represent the treatment effect $k$ periods away from the ChatGPT release date, with $k < 0$ for pre-treatment periods and $k > 0$ for post-treatment periods. When implemented in the synthetic DiD framework, each coefficient $\beta_k$ is estimated using the synthetic control method, comparing Stack Overflow to a weighted combination of control forums optimized for that specific time period. Figure \ref{fig:event_study} displays the results for scripting language questions, and Table \ref{tab:event_study_results} presents the event study estimates across different time periods.
+\begin{equation}
+    \hat{\tau}^{sdid}_{a,\ell} = \frac{1}{N^a_{tr}} \sum_{i \in I^a} Y_{i,a-1+\ell} - \sum_{i=1}^{N_{co}} \omega_i Y_{i,a-1+\ell} - \sum_{t=1}^{a-1} \left( \frac{1}{N^a_{tr}} \sum_{i \in I^a} \lambda_t Y_{i,t} - \sum_{i=1}^{N_{co}} \omega_i \lambda_t Y_{i,t} \right)
+\end{equation}
+
+In our application, $Y_{it}$ is the log-transformed question count for forum $i$ at time $t$, with the different programming languages on Stack Overflow as the treated units (corresponding to $I^a$). The weights $\omega_i$ and $\lambda_t$ are optimally chosen to create a synthetic control that best approximates Stack Overflow's pre-treatment outcome trajectory. For each relative time period $\ell$, the estimator compares the difference between actual and synthetic outcomes to their pre-treatment average difference.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{imgs/stata/event_study_scripting_languages.pdf}
+    \includegraphics[width=0.9\textwidth]{imgs/stata/event_study_scripting_languages.pdf}
     \caption{Event Study Analysis for Scripting Language Questions}
     \label{fig:event_study}
 \end{figure}
+
+
+This approach allows us to examine treatment effects at specific time points relative to ChatGPT's release (November 30, 2022), with $\ell < 0$ for pre-treatment periods and $\ell > 0$ for post-treatment periods. By implementing this within the synthetic DiD framework, each relative time coefficient is estimated using the synthetic control method, comparing Stack Overflow to a weighted combination of control forums optimized for that specific time period. Figure \ref{fig:event_study} displays the results for scripting language questions, and Table \ref{tab:event_study_results} presents the event study estimates across different time periods.
 
 \begin{table}[H]
     \centering
