@@ -127,7 +127,6 @@ def test_term_significance(
 
     return pl.DataFrame(results)
 
-
 # %%
 # Step 1: Load and prepare your lemmatized text data
 # Assuming you have a dataframe with columns: 'post_id', 'date', 'lemmatized_text'
@@ -338,7 +337,11 @@ to_plot = pl.concat([top_increased, top_decreased])
 
 # Create a barplot with percentage changes
 ax = sns.barplot(
-    data=to_plot.to_pandas(), x="tfidf_percent_change", y="term", palette="coolwarm"
+    data=to_plot.to_pandas(),
+    x="tfidf_percent_change",
+    y="term",
+    palette="coolwarm",
+    errorbar="ci",
 )
 
 # Add absolute values as text
@@ -403,3 +406,86 @@ term_stats.write_parquet("../data/tfidf_term_significance.parquet")
 # %%
 t_stats = pl.read_parquet("../data/tfidf_term_significance.parquet")
 t_stats.head()
+
+# %%
+top_terms = t_stats.filter(pl.col("term").is_in(terms_to_test)).sort("difference")
+
+# Create a visualization with matplotlib
+plt.figure(figsize=(16, 8))
+
+# Create a coolwarm colormap based on difference values
+import matplotlib.cm as cm
+from matplotlib.colors import Normalize
+from matplotlib.lines import Line2D
+
+# Normalize difference values to range [-1, 1] for proper coolwarm mapping
+norm = Normalize(
+    vmin=-top_terms["difference"].abs().max(), vmax=top_terms["difference"].abs().max()
+)
+cmap = plt.get_cmap("coolwarm")
+
+# Generate colors from the coolwarm palette
+colors = [cmap(norm(diff)) for diff in top_terms["difference"]]
+
+# Create horizontal bar plot
+y_pos = range(len(top_terms))
+bars = plt.barh(y_pos, top_terms["difference"], color=colors, alpha=0.8)
+
+# Calculate error bar sizes
+error_lower = top_terms["difference"] - top_terms["ci_lower"]
+error_upper = top_terms["ci_upper"] - top_terms["difference"]
+
+# Add error bars with plt.errorbar
+plt.errorbar(
+    top_terms["difference"],  # x data points
+    y_pos,  # y positions
+    xerr=[error_lower, error_upper],  # asymmetric error bars [lower, upper]
+    fmt="none",  # no markers/lines, just error bars
+    ecolor="black",  # black error bars
+    capsize=3,  # size of caps at the end of error bars
+    elinewidth=1.5,  # width of error bar lines
+    capthick=1.5,  # thickness of cap lines
+)
+
+# Add vertical line at zero
+plt.axvline(x=0, color="black", linestyle="--", alpha=0.5)
+
+# Add y-axis labels (terms)
+plt.yticks(y_pos, top_terms["term"])
+
+# Add title and labels
+plt.title("Changes in Term Importance After ChatGPT Release", fontsize=14)
+plt.xlabel("Difference in TF-IDF Score (Post - Pre)", fontsize=12)
+
+# Create a colorbar for reference
+sm = cm.ScalarMappable(cmap=cmap, norm=norm)
+sm.set_array([])
+cbar = plt.colorbar(sm, ax=plt.gca(), orientation="vertical", pad=0.01)
+cbar.set_label("Change in Importance")
+
+# Add a legend explaining the significance marker
+legend_elements = [
+    Line2D(
+        [0],
+        [0],
+        marker="${*}{*}{*}$",
+        color="w",
+        markerfacecolor="black",
+        markersize=10,
+        label="All values statistically significant (p < 0.05)",
+    ),
+    Line2D(
+        [0],
+        [0],
+        color="black",
+        label="95% Confidence Interval (Bootstrapped, 100 reps)",
+    ),
+]
+
+plt.legend(handles=legend_elements, loc="lower right")
+
+plt.tight_layout()
+plt.savefig("../imgs/term_significance_plot.svg")
+plt.show()
+
+
