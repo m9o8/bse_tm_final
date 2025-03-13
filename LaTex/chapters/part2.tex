@@ -8,12 +8,12 @@ To identify the causal impact of ChatGPT on Stack Overflow question volumes, we 
 
 The selection of Mathematics, Physics, Superuser, and AskUbuntu as control units was strategically motivated by several considerations. First, these Stack Exchange forums represent technical knowledge domains with structured question patterns similar to Stack Overflow, yet they address distinct subject matters that were less effectively handled by early ChatGPT versions. While ChatGPT demonstrated strong capabilities in programming tasks from its initial release, it exhibited notable limitations in advanced mathematics, physics reasoning, and system-specific troubleshooting—areas central to our control forums. Second, these forums maintain sufficient question volumes to provide statistical power while exhibiting pre-treatment correlation with Stack Overflow question patterns (cf. \figureref{fig:correlation_matrix}), suggesting similar responsiveness to seasonal trends and external factors affecting forum usage.\\
 
-A critical assumption for traditional difference-in-differences analysis is the parallel trends assumption, which requires that treatment and control groups would follow similar trajectories in the absence of treatment. While examining raw counts shows substantial scale differences between forums, log transformation reveals approximately parallel pre-treatment trends, particularly for scripting language questions (cf. Figure \ref{fig:paralleL_trend_trans}). This transformation addresses heterogeneity in question volumes and improves the validity of our causal inference by better satisfying the parallel trends assumption.\\
+A critical assumption for traditional difference-in-differences analysis is the parallel trends assumption, which requires that treatment and control groups would follow similar trajectories in the absence of treatment. While examining raw counts shows substantial scale differences between forums, for visualization purposes we thus use an indexed count (cf. Figure \ref{fig:paralleL_trend_trans}). However, in the following regressions, we use log transformations for interpretability.\\
 
 \begin{figure}[H]
     \centering
     \includesvg[width=1\linewidth]{imgs/indexed_trends.svg}
-    \caption{Parallel trends: Weekly raw vs indexed question counts}
+    \caption{Parallel trends: Weekly indexed question counts}
     \label{fig:paralleL_trend_trans}
 \end{figure}
 
