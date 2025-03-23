@@ -1,6 +1,6 @@
 \appendix
 
-\section{Difference-in-Difference Question Count Results}\label{app:did}
+\section{Difference-in-Difference Question Counts}\label{app:did}
 
 \begin{figure}[htpb!]
     \centering
@@ -55,6 +55,8 @@
     \end{tabular}
 \end{table}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{imgs/stata/event_study_scripting_languages.pdf}
@@ -62,14 +64,75 @@
     \label{fig:app-event_study}
 \end{figure}
 
+\begin{table}[H]
+    \centering
+    \caption{Event Study: Post-Treatment Effects Over Time for Scripting Languages}
+    \label{tab:app-event_study_results}
+    \begin{tabular}{lccc}
+    \toprule
+    Time Period & Estimate & SE & 95\% CI \\
+    \midrule
+    Week 1-4 after treatment   & -0.335 & 0.079 & [-0.490, -0.180] \\
+    Week 5-12 after treatment  & -0.267 & 0.084 & [-0.432, -0.102] \\
+    Week 13-24 after treatment & -0.482 & 0.080 & [-0.639, -0.325] \\
+    Week 25-36 after treatment & -0.577 & 0.082 & [-0.738, -0.416] \\
+    Week 37-48 after treatment & -0.644 & 0.077 & [-0.795, -0.493] \\
+    Week 49-60 after treatment & -0.718 & 0.081 & [-0.877, -0.559] \\
+    Week 61-65 after treatment & -0.739 & 0.077 & [-0.890, -0.588] \\
+    \midrule
+    Overall treatment effect & -0.502 & 0.073 & [-0.646, -0.358] \\
+    \bottomrule
+    \multicolumn{4}{p{0.95\linewidth}}{\footnotesize \textit{Notes:} Results from synthetic DiD event study analysis with bootstrapped standard errors (100 repetitions). Estimates show the change in log question count for Stack Overflow scripting language questions relative to the synthetic control group across different post-treatment time periods. All effects are statistically significant at the 0.1\% level.} \\
+    \end{tabular}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Processing Pipeline}\label{app:procpipe}
 
-\begin{figure}[htpb!]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{imgs/process_flow.png}
+    \includegraphics[width=0.8\linewidth]{imgs/process_flow.png}
     \caption{Sketched process and file flow}
     \label{fig:app-process_flow}
 \end{figure}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Difference-in-Difference Complexity Score Results}\label{app:did}
+\section{Difference-in-Difference Complexity Scores}\label{app:didcs}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{imgs/stata/sdid_nlp_trends101.pdf}
+    \caption{Synthetic DiD: Question complexity}
+    \label{fig:app-cscore_synthetic_control}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{imgs/stata/event_study_nlp.pdf}
+    \caption{Event study complexity score development}
+    \label{fig:app-cscore_event_study}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \caption{Event Study: Post-Treatment Effects Over Time}
+    \label{tab:app-csscore_event_study}
+    \begin{tabular}{lccc}
+    \toprule
+    Time Period & Estimate & SE & 95\% CI \\
+    \midrule
+    Week 1-4 after treatment   & 0.016 & 0.025 & [-0.033, 0.065] \\
+    Week 5-12 after treatment  & 0.028 & 0.022 & [-0.015, 0.071] \\
+    Week 13-24 after treatment & 0.064 & 0.018 & [0.029, 0.099] \\
+    Week 25-36 after treatment & 0.078 & 0.015 & [0.049, 0.107] \\
+    Week 37-48 after treatment & 0.083 & 0.017 & [0.050, 0.116] \\
+    Week 49-60 after treatment & 0.081 & 0.019 & [0.044, 0.118] \\
+    Week 61-65 after treatment & 0.092 & 0.020 & [0.053, 0.131] \\
+    \midrule
+    Overall treatment effect & 0.059 & 0.014 & [0.032, 0.086] \\
+    \bottomrule
+    \multicolumn{4}{p{0.85\linewidth}}{\footnotesize \textit{Notes:} Results from synthetic DiD event study analysis. Estimates show the change in complexity score for Stack Overflow questions relative to the synthetic control group across different post-treatment time periods. Weeks 13-65 effects are statistically significant at the 5\% level, while the initial 1-12 week periods show positive but statistically insignificant effects.} \\
+    \end{tabular}
+\end{table}

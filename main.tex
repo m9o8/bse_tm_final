@@ -16,14 +16,21 @@
     {\Large Maria Simakova ()\par}
 	{\Large Moritz Peist (254017)\par}
     \noindent\rule{\textwidth}{1pt}
-    \tableofcontents
+    \vfill
+    \begin{abstract}
+        \noindent
+        This study investigates the impact of ChatGPT's introduction on Stack Overflow question patterns, employing both causal inference methods and text mining techniques. Using a Synthetic Difference-in-Differences approach with data from January 2021 to March 2024, we establish that ChatGPT caused a significant 39.5\% reduction in scripting language questions (JavaScript, Python, R, and PHP). Beyond this volumetric impact, we demonstrate a statistically significant increase in question complexity following ChatGPT's release. Our TF-IDF analysis reveals a shift in linguistic content: terms related to troubleshooting and technical infrastructure increased in importance, while basic programming concepts declined. These findings suggest a fundamental change in how developers allocate their information-seeking behavior, with simpler programming questions migrating to AI assistants. At the same time, Stack Overflow increasingly serves more complex, specialized needs requiring human expertise. This paper contributes empirical evidence of how large language models reshape knowledge-sharing dynamics in technical communities, pointing to a complementary relationship between AI tools and human-moderated forums.
+    \end{abstract}
 	\vfill
-
-% Bottom of the page
+    % Bottom of the page
 	{\large \today\par}
 \end{titlepage}
 
+\tableofcontents
+\thispagestyle{empty}
+
 \newpage
+\addtocounter{page}{-1}
 \include*{LaTex/chapters/part1}
 \include*{LaTex/chapters/part2}
 \include*{LaTex/chapters/part3}
