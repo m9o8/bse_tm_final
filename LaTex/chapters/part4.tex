@@ -1,19 +1,11 @@
 \section{Preliminary Results}
-While our NLP analysis remains in progress, our causal findings suggest substantial changes in Stack Overflow usage patterns. Beyond the volume reduction, we observed a fundamental shift in the correlation structure between Stack Exchange forums after ChatGPT's release, as visualized in Figure \ref{fig:correlation_matrix}.
-
-\begin{figure}[htpb!]
-    \centering
-    \includesvg[width=1\textwidth]{imgs/pre-post_correlation_matrices.svg}
-    \caption{Correlation Matrices Before and After ChatGPT Release}
-    \label{fig:correlation_matrix}
-    % Figure 3 reference
-\end{figure}
+While our NLP analysis remains in progress, our causal findings suggest substantial changes in Stack Overflow usage patterns. Beyond the volume reduction, we observed a fundamental shift in the correlation structure between Stack Exchange forums after ChatGPT's release, as visualized in Figure \ref{fig:app-correlation_matrix} in the \appref{app:did}.\\
 
 This dramatic weakening of correlations (from 0.76-0.87 to 0.18-0.65) suggests that ChatGPT has reduced question volume and potentially altered the relationship between programming questions and those in other knowledge domains. This finding motivates our hypothesis that the content and nature of Stack Overflow questions have fundamentally changed in the post-ChatGPT era -- a hypothesis we further strengthened by the following results of complexity scores and term frequencies.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Question complexity impact}
+\subsection{Question Complexity Impact}
 
 The average treatment effect on the treated (ATT) indicates a significant increase in our standardized complexity measure of 0.059 standard deviations (cf. \tableref{tab:csscore_did_results}), as shown in Figure \ref{fig:cscore_synthetic_control}. This effect remains robust when including time-fixed effects and various covariates (ATT = 0.073, SE = 0.010).  
 
