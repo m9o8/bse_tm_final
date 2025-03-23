@@ -1,14 +1,14 @@
 \section{Causal Impact Analysis}
-Before conducting our primary text mining analysis, we first establish the causal impact of ChatGPT on Stack Overflow question volumes. This section outlines our causal inference methodology and findings, which provide critical context for interpreting the subsequent textual analysis results.
+Before conducting our primary text mining analysis, we first establish the causal impact of ChatGPT on Stack Overflow question volumes. This section outlines our causal inference methodology and findings, which provide a critical context for interpreting the subsequent textual analysis results.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Synthetic Difference-in-Differences Methodology}
 To identify the causal impact of ChatGPT on Stack Overflow question volumes, we employ a Synthetic Difference-in-Differences (SDID) approach (\cite{arkhangelsky_synthetic_2021}). This methodology combines the strengths of traditional difference-in-differences and synthetic control methods, allowing us to construct a credible counterfactual for Stack Overflow in the absence of ChatGPT.\\
 
-The selection of Mathematics, Physics, Superuser, and AskUbuntu as control units was strategically motivated by several considerations. First, these Stack Exchange forums represent technical knowledge domains with structured question patterns similar to Stack Overflow, yet they address distinct subject matters that were less effectively handled by early ChatGPT versions. While ChatGPT demonstrated strong capabilities in programming tasks from its initial release, it exhibited notable limitations in advanced mathematics, physics reasoning, and system-specific troubleshooting—areas central to our control forums. Second, these forums maintain sufficient question volumes to provide statistical power while exhibiting pre-treatment correlation with Stack Overflow question patterns (cf. \figureref{fig:correlation_matrix}), suggesting similar responsiveness to seasonal trends and external factors affecting forum usage.\\
+The selection of Mathematics, Physics, Superuser, and AskUbuntu as control units was strategically motivated by several considerations. First, these Stack Exchange forums represent technical knowledge domains with structured question patterns similar to Stack Overflow. Yet, they address distinct subject matters less effectively handled by early ChatGPT versions. While ChatGPT demonstrated strong capabilities in programming tasks from its initial release, it exhibited notable limitations in advanced mathematics, physics reasoning, and system-specific troubleshooting—areas central to our control forums. Second, these forums maintain sufficient question volumes to provide statistical power while exhibiting pre-treatment correlation with Stack Overflow question patterns (cf. \figureref{fig:app-correlation_matrix} in \appref{app:did}), suggesting similar responsiveness to seasonal trends and external factors affecting forum usage.\\
 
-A critical assumption for traditional difference-in-differences analysis is the parallel trends assumption, which requires that treatment and control groups would follow similar trajectories in the absence of treatment. While examining raw counts shows substantial scale differences between forums, for visualization purposes we thus use an indexed count (cf. Figure \ref{fig:paralleL_trend_trans}). However, in the following regressions, we use log transformations for interpretability.\\
+A critical assumption for traditional difference-in-differences analysis is the parallel trends assumption, which requires that treatment and control groups would follow similar trajectories in the absence of treatment. While examining raw counts shows substantial scale differences between forums, for visualization purposes, we thus use an indexed count (cf. Figure \ref{fig:paralleL_trend_trans}). However, in the following regressions, we use log transformations for interpretability.\\
 
 \begin{figure}[H]
     \centering
@@ -17,9 +17,9 @@ A critical assumption for traditional difference-in-differences analysis is the 
     \label{fig:paralleL_trend_trans}
 \end{figure}
 
-Despite the similar pre-treatment trends, i.e., all Stack Exchanges saw slightly decreasing question counts, concerns remain about external shocks that might differentially affect Stack Overflow and control forums. Our methodological approach addresses this in two complementary ways. First, our baseline DiD implementation using Stata's \mintinline{stata}{xtdidregress} automatically adjusts for both panel (forum) effects and time effects in calculating the treatment effect. We verified the robustness of these results by explicitly testing specifications with additional time fixed effects at various granularities (weekly, monthly, quarterly), which yielded identical treatment effect estimates.\\
+Despite the similar pre-treatment trends, i.e., all Stack Exchanges saw slightly decreasing question counts, concerns remain about external shocks that might differentially affect Stack Overflow and control forums. Our methodological approach addresses this in two complementary ways. First, our baseline DiD implementation using Stata's \mintinline{stata}{xtdidregress} automatically adjusts for both panel (forum) effects and time effects in calculating the treatment effect. We verified the robustness of these results by explicitly testing specifications with additional time-fixed effects at various granularities (weekly, monthly, quarterly), which yielded identical treatment effect estimates.\\
 
-Second, our synthetic DiD approach further strengthens causal identification by constructing a weighted combination of control units that better approximates the counterfactual for Stack Overflow. This method implicitly accounts for time-varying factors to the extent they similarly affect both treatment and control units, creating a more credible counterfactual than standard DiD approaches relying solely on parallel trends assumptions. Together, these approaches provide robust evidence that our findings reflect the causal impact of ChatGPT rather than coincidental time-specific shocks.
+Second, our synthetic DiD approach further strengthens causal identification by constructing a weighted combination of control units that better approximates the counterfactual for Stack Overflow. This method implicitly accounts for time-varying factors to the extent they similarly affect both treatment and control units, creating a more credible counterfactual than standard DiD approaches relying solely on parallel trend assumptions. Together, these approaches provide robust evidence that our findings reflect the causal impact of ChatGPT rather than coincidental time-specific shocks.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -44,10 +44,12 @@ where $Y_{jt}$ represents the log-transformed question count for forum $j$ at ti
 
 \subsection{Causal Impact Results}
 
+The following section provides an overview of our motivating Difference-in-Difference approach to post ChatGPT question volumes on Stack Overflow.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection{Base DiD Estimates}
-We begin with standard DiD estimates for both all Stack Overflow questions and specifically for scripting language questions (JavaScript, Python, R, and PHP). Table \ref{tab:did_results} presents these base DiD results, while Table \ref{tab:sdid_results} presents the synthetic DiD estimates with and without covariate controls.
+We begin with standard DiD estimates for both all Stack Overflow questions and specifically for scripting language questions (JavaScript, Python, R, and PHP). Table \ref{tab:did_results} presents these base DiD results:
 
 \begin{table}[H]
     \centering
@@ -75,58 +77,14 @@ We begin with standard DiD estimates for both all Stack Overflow questions and s
     \end{tabular}
 \end{table}
 
-These results indicate statistically significant negative effects across all model specifications. For all Stack Overflow questions, the standard DiD model (Table \ref{tab:did_results}) indicates a 21.4\% decrease in question volume, while the synthetic DiD models (Table \ref{tab:sdid_results}, columns 1-2) suggest a larger 26.7\% reduction. For scripting language questions, we observe a much larger decline of 35.8\% in the standard DiD model and 39.5\% in the synthetic DiD model. This differential impact suggests that ChatGPT has been particularly effective at addressing programming questions related to these popular scripting languages.
+These results indicate statistically significant negative effects across all model specifications. The standard DiD model (Table \ref{tab:did_results}) indicates a 21.4\% decrease in question volume for all Stack Overflow questions. In contrast, for scripting language questions, we observe a much more significant decline of 35.8\% in the standard DiD model and 39.5\% in the synthetic DiD model. This differential impact suggests that ChatGPT has been particularly effective at addressing programming questions related to these popular scripting languages.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection{Synthetic DiD Results}
-To address potential violations of the parallel trends assumption and create a more credible counterfactual, we employ the SDID approach. Figure \ref{fig:sdid_all} visualizes the results for all Stack Overflow questions, while Figure \ref{fig:sdid_script} focuses on scripting language questions, and Table \ref{tab:sdid_results} presents the formal SDID estimates.
+To address potential violations of the parallel trends assumption and create a more credible counterfactual, we employ the SDID approach, which yields larger treatment effect estimates compared to standard DiD, suggesting that the traditional DiD may underestimate the impact. The SDID results indicate a 26.7\% reduction in overall question volume and a substantial 39.5\% reduction in scripting language questions (covariate-adjusted results are 26.5\% and 39.2\%, respectively).\\
 
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.475\textwidth}
-        \centering
-        \includegraphics[width=1\textwidth]{imgs/stata/sdid_all_trends101.pdf}
-        \caption{Impact on All Stack Overflow Questions}
-        \label{fig:sdid_all}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.475\textwidth}
-        \centering
-        \includegraphics[width=1\textwidth]{imgs/stata/sdid_script_trends101.pdf}
-        \caption{Impact on Scripting Language Questions}
-        \label{fig:sdid_script}
-    \end{subfigure}
-    \caption{Synthetic difference-in-difference plots}
-    \label{fig:DiD}
-\end{figure}
-
-\begin{table}[H]
-    \centering
-    \caption{Synthetic DiD Estimates of ChatGPT's Impact on Stack Overflow Question Volume}
-    \label{tab:sdid_results}
-    \begin{tabular}{lcccc}
-        \toprule
-            & \multicolumn{2}{c}{All Questions} & \multicolumn{2}{c}{Scripting Languages} \\
-            \cmidrule(lr){2-3} \cmidrule(lr){4-5}
-            & (1) & (2) & (3) & (4) \\
-        \midrule
-            Treatment Effect & $-0.311^{***}$ & $-0.308^{***}$ & $-0.502^{***}$ & $-0.497^{***}$ \\
-            & $(0.019)$ & $(0.000)$ & $(0.042)$ & $(0.039)$ \\
-        \midrule
-            Month covariates & No & Yes & No & Yes \\
-            Percent Change & $-26.7\%$ & $-26.5\%$ & $-39.5\%$ & $-39.2\%$ \\
-        \midrule
-            Observations & 830 & 830 & 1,328 & 1,328 \\
-            Number of groups & 5 & 5 & 8 & 8 \\
-            Pre-treatment periods & 101 & 101 & 101 & 101 \\
-            Post-treatment periods & 65 & 65 & 65 & 65 \\
-        \bottomrule
-            \multicolumn{5}{p{0.95\linewidth}}{\footnotesize \textit{Notes:} Standard errors in parentheses based on placebo/bootstrap replications (100 repetitions). $^{***}p<0.001$. The dependent variable is log question count. All models include time and group fixed effects. Treatment is defined as the period after ChatGPT's release (November 30, 2022).} \\
-    \end{tabular}
-\end{table}
-
-The SDID approach yields larger treatment effect estimates compared to standard DiD, suggesting that the traditional DiD may underestimate the impact. The SDID results indicate a 26.7\% reduction in overall question volume and a substantial 39.5\% reduction in scripting language questions (covariate-adjusted results are 26.5\% and 39.2\% respectively).
+With additional details in the \appref{app:did}, \figureref{fig:app-sdid_all} visualizes the results for all Stack Overflow questions, while \figureref{fig:app-sdid_script} focuses on scripting language questions, and \tableref{tab:app-sdid_results} presents the formal SDID estimates.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -143,17 +101,9 @@ where $\hat{\tau}^{sdid}_{a,\ell}$ represents the dynamic treatment effect $\ell
     \hat{\tau}^{sdid}_{a,\ell} = \frac{1}{N^a_{tr}} \sum_{i \in I^a} Y_{i,a-1+\ell} - \sum_{i=1}^{N_{co}} \omega_i Y_{i,a-1+\ell} - \sum_{t=1}^{a-1} \left( \frac{1}{N^a_{tr}} \sum_{i \in I^a} \lambda_t Y_{i,t} - \sum_{i=1}^{N_{co}} \omega_i \lambda_t Y_{i,t} \right)
 \end{equation}
 
-In our application, $Y_{it}$ is the log-transformed question count for forum $i$ at time $t$, with the different programming languages on Stack Overflow as the treated units (corresponding to $I^a$). The weights $\omega_i$ and $\lambda_t$ are optimally chosen to create a synthetic control that best approximates Stack Overflow's pre-treatment outcome trajectory. For each relative time period $\ell$, the estimator compares the difference between actual and synthetic outcomes to their pre-treatment average difference.
+In our application, $Y_{it}$ is the log-transformed question count for forum $i$ at time $t$, with the different programming languages on Stack Overflow as the treated units (corresponding to $I^a$). The weights $\omega_i$ and $\lambda_t$ are optimally chosen to create a synthetic control that best approximates Stack Overflow's pre-treatment outcome trajectory. For each relative time period $\ell$, the estimator compares the difference between actual and synthetic outcomes to their pre-treatment average difference.\\
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{imgs/stata/event_study_scripting_languages.pdf}
-    \caption{Event Study Analysis for Scripting Language Questions}
-    \label{fig:event_study}
-\end{figure}
-
-
-This approach allows us to examine treatment effects at specific time points relative to ChatGPT's release (November 30, 2022), with $\ell < 0$ for pre-treatment periods and $\ell > 0$ for post-treatment periods. By implementing this within the synthetic DiD framework, each relative time coefficient is estimated using the synthetic control method, comparing Stack Overflow to a weighted combination of control forums optimized for that specific time period. Figure \ref{fig:event_study} displays the results for scripting language questions, and Table \ref{tab:event_study_results} presents the event study estimates across different time periods.
+This approach allows us to examine treatment effects at specific time points relative to ChatGPT's release (November 30, 2022), with $\ell < 0$ for pre-treatment periods and $\ell > 0$ for post-treatment periods. By implementing this within the synthetic DiD framework, each relative time coefficient is estimated using the synthetic control method, comparing Stack Overflow to a weighted combination of control forums optimized for that specific time period. Table \ref{tab:event_study_results} presents the event study estimates across different time periods, while Figure \ref{fig:app-event_study} in the \appref{app:did} displays the results for scripting language questions, and.
 
 \begin{table}[H]
     \centering
