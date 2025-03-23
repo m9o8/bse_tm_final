@@ -1,94 +1,143 @@
+---
+config:
+  theme: mc
+  look: neo
+  layout: elk
+---
 flowchart TD
-    %% Data Sources
-    source[Stack Exchange 7z Archives] --> extraction
-
-    %% Main Process Flow
-    subgraph extraction[1.Data Extraction  - 1_data_extraction.py]
-        extract["process_stack_data()"] --> so[Stack Overflow Data]
-        extract --> math[Mathematics Data]
-        extract --> physics[Physics Data]
-        extract --> superuser[SuperUser Data]
-        extract --> askubuntu[AskUbuntu Data]
-        
-        %% Stack Overflow filtering
-        so --> so_all["All SO Questions (stackoverflow.parquet)"]
-        so --> so_script["Script Languages Only (stackoverflow_script.parquet)"]
-    end
-
-    %% Data Preparation
-    subgraph preparation[2.Data Preparation - 2_eda.py]
-        so_all & so_script & math & physics & superuser & askubuntu --> prepare["prepare_forum_data()"]
-        prepare --> weekly[Weekly Aggregated Data]
-        weekly --> transform["transform_for_parallel()"]
-        transform --> parallel_data[Transformed Data for Parallel Trends]
-        
-        %% Data export for statistical analysis
-        parallel_data --> stata_script["Script Questions .dta (so_all.dta)"]
-        parallel_data --> stata_combined["All Questions .dta (so_script.dta)"]
-    end
-
-    %% Preprocessing
-    subgraph preprocessing[3.Preprocessing]
-        subgraph so_preprocess[3.1a Stack Overflow - preprocessing_batch_so.py]
-            so_script --> extract_so[Extract Text & Code]
-            extract_so --> batch_so[Batch Processing]
-            batch_so --> preprocess_so[Text Preprocessing]
-            preprocess_so --> merge_so[Merge Batches]
-            merge_so --> so_processed[SO Processed Data]
-        end
-        
-        subgraph other_preprocess[3.1b Other Forums - preprocessing_other.py]
-            math & physics & superuser & askubuntu --> combine_others[Combine Non-SO Forums]
-            combine_others --> extract_other[Extract Text & Tech Expressions]
-            extract_other --> batch_other[Batch Processing]
-            batch_other --> preprocess_other[Text Preprocessing]
-            preprocess_other --> merge_other[Merge Batches]
-            merge_other --> other_processed[Other Forums Processed Data]
-        end
-    end
-
-    %% Text Analysis
-    subgraph text_analysis[3.2-3.3 Text Analysis]
-        so_processed --> metrics[Calculate Text Metrics\n3_2_text_metrics.py]
-        other_processed --> metrics
-        
-        metrics --> complexity[Complexity Score]
-        complexity --> nlp_data["NLP Metrics .dta (nlp.dta)"]
-        
-        so_processed --> tfidf[TF-IDF Analysis\n3_3_processing.py]
-        tfidf --> term_freq[Term Frequency Analysis]
-        term_freq --> term_significance[Statistical Term Significance]
-    end
-
-    %% Statistical Analysis
-    subgraph stats[4.Statistical Analysis in Stata]
-        subgraph volume[4.1 Volume Analysis - 4_1_stata.do]
-            stata_script --> did_volume[DiD Analysis]
-            stata_combined -->
-            did_volume --> synthdid_volume[Synthetic DiD]
-            synthdid_volume --> event_volume[Event Study]
-        end
-        
-        subgraph complexity_analysis[4.2 Complexity Analysis - 4_2_nlp.do]
-            nlp_data --> did_nlp[DiD Analysis]
-            did_nlp --> synthdid_nlp[Synthetic DiD]
-            synthdid_nlp --> event_nlp[Event Study]
-        end
-    end
-
-    %% Results Flow
-    term_significance --> terms_results[Term Change Results]
-    event_volume --> volume_results[Volume Impact Results]
-    event_nlp --> complexity_results[Complexity Impact Results]
-    
-    %% Final Integration
-    terms_results & volume_results & complexity_results --> final[Final ChatGPT Impact Analysis]
-
-    %% Style
-    classDef process fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef data fill:#bbf,stroke:#333,stroke-width:1px;
-    classDef result fill:#bfb,stroke:#333,stroke-width:2px;
-    
-    class extract,prepare,transform,extract_so,extract_other,preprocess_so,preprocess_other,metrics,tfidf,did_volume,did_nlp,synthdid_volume,synthdid_nlp process;
-    class so,math,physics,superuser,askubuntu,so_all,so_script,weekly,parallel_data,stata_script,stata_combined,so_processed,other_processed,complexity,nlp_data,term_freq data;
-    class terms_results,volume_results,complexity_results,final result;
+ subgraph extraction["1.Data Extraction  - 1_data_extraction.py"]
+        so["Stack Overflow Data"]
+        extract["process_stack_data()"]
+        math["Mathematics Data"]
+        physics["Physics Data"]
+        superuser["SuperUser Data"]
+        askubuntu["AskUbuntu Data"]
+        so_all["All SO Questions (stackoverflow.parquet, 2.5 GB)"]
+        so_script["Script Languages Only (stackoverflow_script.parquet, 0.8 GB)"]
+  end
+ subgraph preparation["2.Data Preparation - 2_eda.py"]
+        prepare["prepare_forum_data()"]
+        weekly["Weekly Aggregated Data"]
+        transform["transform_for_parallel()"]
+        parallel_data["Transformed Data for Parallel Trends"]
+        stata_script["Script Questions .dta (so_all.dta)"]
+        stata_combined["All Questions .dta (so_script.dta)"]
+  end
+ subgraph so_preprocess["3.1a Stack Overflow - preprocessing_batch_so.py"]
+        extract_so["Extract Text & Code"]
+        batch_so["Batch Processing"]
+        preprocess_so["Text Preprocessing"]
+        merge_so["Merge Batches"]
+        so_processed["SO Processed Data"]
+  end
+ subgraph other_preprocess["3.1b Other Forums - preprocessing_other.py"]
+        combine_others["Combine Non-SO Forums"]
+        extract_other["Extract Text & Tech Expressions"]
+        batch_other["Batch Processing"]
+        preprocess_other["Text Preprocessing"]
+        merge_other["Merge Batches"]
+        other_processed["Other Forums Processed Data"]
+  end
+ subgraph preprocessing["3.Preprocessing"]
+        so_preprocess
+        other_preprocess
+  end
+ subgraph text_analysis["3.2-3.3 Text Analysis"]
+        metrics["Calculate Text Metrics\n3_2_text_metrics.py"]
+        complexity["Complexity Score"]
+        nlp_data["NLP Metrics .dta (nlp.dta)"]
+        tfidf["TF-IDF Analysis\n3_3_processing.py"]
+        term_freq["Term Frequency Analysis"]
+        term_significance["Statistical Term Significance"]
+  end
+ subgraph volume["4.1 Volume Analysis - 4_1_stata.do"]
+        did_volume["DiD Analysis"]
+        synthdid_volume["Synthetic DiD"]
+        event_volume["Event Study"]
+  end
+ subgraph complexity_analysis["4.2 Complexity Analysis - 4_2_nlp.do"]
+        did_nlp["DiD Analysis"]
+        synthdid_nlp["Synthetic DiD"]
+        event_nlp["Event Study"]
+  end
+ subgraph stats["4.Statistical Analysis in Stata"]
+        volume
+        complexity_analysis
+  end
+    source["Stack Exchange 7z Archives (100 GB)"] --> extraction
+    extract --> so & math & physics & superuser & askubuntu
+    so --> so_all & so_script
+    so_all --> prepare
+    so_script --> prepare & extract_so
+    math --> prepare & combine_others
+    physics --> prepare & combine_others
+    superuser --> prepare & combine_others
+    askubuntu --> prepare & combine_others
+    prepare --> weekly
+    weekly --> transform
+    transform --> parallel_data
+    parallel_data --> stata_script & stata_combined
+    extract_so --> batch_so
+    batch_so --> preprocess_so
+    preprocess_so --> merge_so
+    merge_so --> so_processed
+    combine_others --> extract_other
+    extract_other --> batch_other
+    batch_other --> preprocess_other
+    preprocess_other --> merge_other
+    merge_other --> other_processed
+    so_processed --> metrics & tfidf
+    other_processed --> metrics
+    metrics --> complexity
+    complexity --> nlp_data
+    tfidf --> term_freq
+    term_freq --> term_significance
+    stata_script --> did_volume
+    stata_combined --> did_volume
+    did_volume --> synthdid_volume
+    synthdid_volume --> event_volume
+    nlp_data --> did_nlp
+    did_nlp --> synthdid_nlp
+    synthdid_nlp --> event_nlp
+    term_significance --> terms_results["Term Change Results"]
+    event_volume --> volume_results["Volume Impact Results"]
+    event_nlp --> complexity_results["Complexity Impact Results"]
+    terms_results --> final["Final ChatGPT Impact Analysis"]
+    volume_results --> final
+    complexity_results --> final
+     extract:::process
+     so:::data
+     math:::data
+     physics:::data
+     superuser:::data
+     askubuntu:::data
+     so_all:::data
+     so_script:::data
+     prepare:::process
+     weekly:::data
+     transform:::process
+     parallel_data:::data
+     stata_script:::data
+     stata_combined:::data
+     extract_so:::process
+     preprocess_so:::process
+     so_processed:::data
+     extract_other:::process
+     preprocess_other:::process
+     other_processed:::data
+     metrics:::process
+     complexity:::data
+     nlp_data:::data
+     tfidf:::process
+     term_freq:::data
+     did_volume:::process
+     synthdid_volume:::process
+     did_nlp:::process
+     synthdid_nlp:::process
+     terms_results:::result
+     volume_results:::result
+     complexity_results:::result
+     final:::result
+    classDef process fill:#f9f,stroke:#333,stroke-width:2px
+    classDef data fill:#bbf,stroke:#333,stroke-width:1px
+    classDef result fill:#bfb,stroke:#333,stroke-width:2px
