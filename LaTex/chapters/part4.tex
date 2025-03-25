@@ -1,69 +1,30 @@
-\section{Results}
-While our NLP analysis remains in progress, our causal findings suggest substantial changes in Stack Overflow usage patterns. Beyond the volume reduction, we observed a fundamental shift in the correlation structure between Stack Exchange forums after ChatGPT's release, as visualized in Figure \ref{fig:app-correlation_matrix} in the \appref{app:did}.\\
+\section{Natural Language Processing Methodology}
+\label{sec:nlp_methodology}
 
-This dramatic weakening of correlations (from 0.76-0.87 to 0.18-0.65) suggests that ChatGPT has reduced question volume and potentially altered the relationship between programming questions and those in other knowledge domains. This finding motivates our hypothesis that the content and nature of Stack Overflow questions have fundamentally changed in the post-ChatGPT era -- a hypothesis we further strengthened by the following results of complexity scores and term frequencies.
+Building on the established causal impact, we now turn to our primary contribution: a comprehensive NLP analysis of how question content, complexity, and focus have evolved in response to ChatGPT's introduction. This section outlines our NLP methodology for detecting and characterizing these changes. \figureref{fig:app-process_flow} in \appref{app:procpipe} provides a sketched overview of our entire processing pipeline including file names in a flowchart.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Question Complexity Impact}
+\subsection{Complexity Analysis}
 
-The average treatment effect on the treated (ATT) indicates a significant increase in our standardized complexity measure of 0.059 standard deviations (cf. \tableref{tab:csscore_did_results}), as shown in \figureref{fig:app-cscore_synthetic_control} in the \appref{app:didcs}. This effect remains robust when including time-fixed effects and various covariates (ATT = 0.073, SE = 0.010).  
+Based on the pre-processed data, we construct a parsimonious complexity score for forum posts which is composed of 4 key elements: (1) title length, (2) body length, (3) number of tags and (4) length of technical expressions (i.e. code, or equation length for the respective forums)\footnote{We used different metrics appropriate to each forum's content: code length was measured for Stack Overflow, Superuser, and Askubuntu, while equation length was used for Mathematics and Physics. This distinction reflects the content patterns in our data, as Physics and Mathematics questions contained code in fewer than 5\% of posts, while the technology-focused forums rarely contained equations.}:
 
-\begin{table}[H]
+\begin{multline}\label{eq:cscore}
+    \text{Complexity Score}_{i,t} = \\ 
+    \frac{1}{4} \left( \frac{\text{TagCount}_{i,t} - \mu_{\text{TagCount}}}{\sigma_{\text{TagCount}}} + \frac{\text{TechExprLength}_{i,t} - \mu_{\text{TechExprLength}}}{\sigma_{\text{TechExprLength}}} \right. \\
+    \left. + \frac{\text{BodyLength}_{i,t} - \mu_{\text{BodyLength}}}{\sigma_{\text{BodyLength}}} + \frac{\text{TitleLength}_{i,t} - \mu_{\text{TitleLength}}}{\sigma_{\text{TitleLength}}} \right)
+\end{multline}
+
+\equationref{eq:cscore} thus shows the complexity score of forum $i$ in time (week) $t$. The reason for choosing this relatively simple score is that questions often use snippets of code or equations. Thus, more sophisticated and established equation or code complexity algorithms become unusable. \tableref{fig:complex} presents the results over time:
+
+\begin{figure}[htpb!]
     \centering
-    \caption{Impact of ChatGPT on Stack Overflow Question Complexity}
-    \label{tab:csscore_did_results}
-    \begin{tabular}{lccc}
-    \toprule
-    & \multicolumn{3}{c}{Dependent variable: Complexity Score} \\
-    \cmidrule(lr){2-4}
-    & (1) & (2) & (3) \\
-    \midrule
-    Treatment Effect         & 0.084$^{***}$ & 0.059$^{***}$ & 0.073$^{***}$ \\
-    & (0.011)       & (0.014)       & (0.010) \\
-    &               &               & \\
-    \midrule
-    Model                    & Basic DiD     & Synthetic DiD & Synthetic DiD \\
-    Time fixed effects       & Yes           & Yes           & Yes \\
-    Group fixed effects      & Yes           & Yes           & Yes \\
-    Month covariates         & No            & No            & Yes \\
-    \midrule
-    Observations             & 1,328         & 1,328         & 1,328 \\
-    Number of groups         & 8             & 8             & 8 \\
-    Pre-treatment periods    & 101           & 101           & 101 \\
-    Post-treatment periods   & 65            & 65            & 65 \\
-    \bottomrule
-    \multicolumn{4}{p{1\linewidth}}{\footnotesize \textit{Notes:} Standard errors in parentheses, clustered at the group level. $^{*}$ p$<$0.1, $^{**}$ p$<$0.05, $^{***}$ p$<$0.01. The dependent variable is the standardized complexity score calculated at the individual question level. Each question's complexity is measured as the average of four z-standardized components: tag count, code length, body length, and title length. Treatment is defined as the period after ChatGPT's release (November 30, 2022). Models 1-2 use traditional DiD specifications, while Model 3 uses synthetic control methods with month covariates.} \\
-    \end{tabular}
-\end{table}
-
-Our complexity scores (cf. \equationref{eq:cscore}), capture multiple dimensions of question sophistication, providing a comprehensive measure of question complexity at the individual level. The traditional DiD regression also confirms this effect (cf. \tableref{tab:app-csscore_event_study} in \appref{app:didcs}), with consistent findings across various model specifications. Figure \ref{fig:app-cscore_event_study} in \appref{app:didcs} presents the event study results, demonstrating both the immediate impact following ChatGPT's introduction and the persistence of this effect throughout the post-treatment period.\\
-
-The event study in Figure \ref{fig:app-cscore_event_study}  in \appref{app:didcs} reveals that while there was an initial positive but non-significant effect in the first twelve weeks after ChatGPT's release, this effect became statistically significant and stronger from week 13 onward. The impact has persisted and strengthened over time, with the largest effect observed in the most recent period (weeks 61-65), suggesting a fundamental shift in how developers utilize Stack Overflow rather than a temporary adjustment.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Analysis of Question Content Changes}
-
-The TF-IDF analysis reveals patterns consistent with our complexity findings (cf.~\figureref{fig:tfidf}). Terms related to troubleshooting and debugging (e.g., \enquote{error}, \enquote{issue}, \enquote{expect}), as well as technical infrastructure terms (\enquote{version}, \enquote{package}, \enquote{library}) showed significant increases in importance, while terms associated with basic programming concepts (\enquote{array}, \enquote{loop}, \enquote{list}) decreased significantly. These shifts in term importance indicate that ChatGPT has likely absorbed simpler programming questions, leaving Stack Overflow to serve more complex, specific troubleshooting needs.\\
-
-Notably, conversational terms (\enquote{like}, \enquote{want}, etc.) also decreased in importance, suggesting a shift toward more technical, problem-specific language in post-ChatGPT questions. This aligns with our hypothesis that questions remaining on Stack Overflow have become more specialized and technical in nature.
-
-\begin{figure}[H]
-    \centering
-    \includesvg[width=1\linewidth]{imgs/term_significance_plot.svg}
-    \caption{Top 10 increases and decreases in TF-IDF scores after ChatGPT's introduction}
-    \label{fig:tfidf}
+    \includesvg[width=1\linewidth]{imgs/stackoverflow_vs_rest.svg}
+    \caption{Treatment vs. Control: Question complexity over time}
+    \label{fig:complex}
 \end{figure}
 
-The linguistic changes revealed through our TF-IDF analysis provide qualitative context for the quantitative complexity increases observed in our Synthetic DiD model. The notable shift toward troubleshooting terminology coupled with decreased prevalence of basic programming terms suggests that ChatGPT has fundamentally altered the nature of questions on Stack Overflow, not just their volume or overall complexity.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Interpretation}
-
-These findings support our hypothesis that ChatGPT has altered information-seeking behavior in programming communities. Developers now appear to reserve simpler questions for ChatGPT while turning to Stack Overflow for more complex programming challenges that require human expertise. The magnitude of this effect—approximately 0.059 standard deviations increase in question complexity—represents a modest but statistically significant shift in the types of questions users bring to Stack Overflow.\\
-
-To put this effect size in context, it represents a meaningful change in question complexity, particularly given that the complexity measure was calculated at the individual question level using standardized metrics across all questions in our dataset. The gradual increase in effect size over time further suggests that this is not merely a temporary adjustment but rather reflects an evolving shift in how programmers allocate their questions between AI tools and human-moderated forums.\\
-
-This empirical evidence points to a complementary relationship between AI-powered assistants and human-moderated Q\&A forums, with each platform serving distinct informational needs within the programming community. Stack Overflow appears to be evolving toward a repository for more complex programming questions, while more straightforward queries may be increasingly handled through interaction with large language models like ChatGPT.
+\subsection{Term Importance Analysis}
+To understand the nature of the complexity changes identified in our Synthetic DiD analysis, we examine shifts in term importance using TF-IDF (Term Frequency-Inverse Document Frequency) analysis. Unlike raw term frequency, TF-IDF weights terms based on their relative importance within documents and across the corpus, highlighting discriminative terms while down-weighting common ones. Figure \ref{fig:tfidf} shows the significant changes in term importance before and after ChatGPT's introduction. To ensure observed term changes represent genuine shifts rather than random variation, we applied statistical testing using bootstrapped confidence intervals (100 replications) and permutation tests ($\alpha = 0.05$). This approach allowed us to identify statistically significant changes in term importance that correlate with the introduction of ChatGPT.
