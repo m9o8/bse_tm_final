@@ -90,8 +90,22 @@
     style=authoryear,
     hyperref=true
     ]{biblatex}
+% Configure cite to show Author (Year)
+\DeclareCiteCommand{\cite}
+  {\usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \printnames{labelname}%
+   \space(\printfield{year})}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+
+% Configure parencite to show (Author et al., Year)
+\DeclareNameAlias{labelname}{family-given}
+\renewcommand*{\nameyeardelim}{\addcomma\space}
+\AtEveryCitekey{\ifciteseen{}{\defcounter{maxnames}{1}}}
 \usepackage{csquotes}
 %\usepackage{biblatex}
 \addbibresource{LaTex/chapters/references.bib}
 %\usepackage[all]{hypcap} %Positioning of linked objects after jump
-\setlength\parindent{0pt} %No intendation across whole doc
+\setlength{\parskip}{0.3\baselineskip} % Adjust spacing between paragraphs
+\setlength{\parindent}{0pt} % Remove paragraph indentation if desired
