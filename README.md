@@ -22,6 +22,8 @@ Our dataset spans January 2021 to March 2024, with a focus on scripting language
 - **Complexity Increase**: Questions have become significantly more complex after ChatGPT's introduction
 - **Content Shifts**: Term importance analysis shows troubleshooting and technical terms increased, while basic programming concepts decreased
 
+![Impact on Stack Overflow Question Volume](imgs/stata/sdid_script_trends101.svg)
+
 ## Abstract
 
 Applying the Technology Acceptance Model framework, we analyze how ChatGPT's perceived usefulness and ease of use have reshaped developers' information-seeking behavior. Using a Synthetic Difference-in-Differences approach with data spanning January 2021 to March 2024, we establish that ChatGPT caused a significant 39.5% reduction in scripting language questions (JavaScript, Python, R, and PHP). Beyond this volumetric decline, we demonstrate a statistically significant increase in question complexity following ChatGPT's introduction.
@@ -44,7 +46,24 @@ We approach these questions through a two-stage methodology:
 
 ### Causal Impact Analysis
 
-- Synthetic DiD approach to construct counterfactual for Stack Overflow
+To identify the causal impact of ChatGPT on Stack Overflow question volumes, we employ a Synthetic Difference-in-Differences (SDID) approach (Arkhangelsky et al., 2021). Our base DiD model can be expressed as:
+
+$$Y_{it} = \beta_1(Treatment_i \times Post_t) + \gamma_i + \lambda_t + \varepsilon_{it}$$
+
+where $Y_{it}$ represents either the log-transformed question count or complexity score, $Treatment_i$ is an indicator for Stack Overflow, and $Post_t$ indicates periods after ChatGPT's release.
+
+For our synthetic DiD approach, the estimator can be expressed as:
+
+$$\hat{\tau}_{\text{SDID}} = \sum_{t=T_0+1}^T \lambda_t \left( Y_{1t} - \sum_{j=2}^J \omega_j Y_{jt} \right) - \sum_{t=1}^{T_0} \lambda_t \left( Y_{1t} - \sum_{j=2}^J \omega_j Y_{jt} \right)$$
+
+where $\omega_j$ are unit weights, $\lambda_t$ are time weights, and $T_0$ is the last pre-treatment period.
+
+For the event study analysis, we use the SDID event study estimator (Ciccia, 2024):
+
+$$\hat{\tau}^{sdid}_{\ell} = \sum_{a \in A_{\ell}} \frac{N^a_{tr}}{N^{\ell}_{tr}} \hat{\tau}^{sdid}_{a,\ell}$$
+
+This approach allows us to examine treatment effects at specific time points relative to ChatGPT's release.
+
 - Control groups: Mathematics, Physics, Superuser, and AskUbuntu forums
 - Event study analysis to track effects over time
 
@@ -67,11 +86,11 @@ We constructed a parsimonious complexity score for forum posts composed of 4 key
 
 The standardized complexity score is calculated as:
 
-```
-Complexity Score = 1/4 * (Z(TagCount) + Z(TechExprLength) + Z(BodyLength) + Z(TitleLength))
-```
+$$
+\text{Complexity Score}_{i,t} = \frac{1}{4} \left( \frac{\text{TagCount}_{i,t} - \mu_{\text{TagCount}}}{\sigma_{\text{TagCount}}} + \frac{\text{TechExprLength}_{i,t} - \mu_{\text{TechExprLength}}}{\sigma_{\text{TechExprLength}}} \right. \left. + \frac{\text{BodyLength}_{i,t} - \mu_{\text{BodyLength}}}{\sigma_{\text{BodyLength}}} + \frac{\text{TitleLength}_{i,t} - \mu_{\text{TitleLength}}}{\sigma_{\text{TitleLength}}} \right)
+$$
 
-Where Z represents the z-standardization of each metric across all questions in our dataset.
+![Event study result](imgs/stata/sdid_nlp_trends101.svg)
 
 Our synthetic DiD analysis reveals a statistically significant increase in question complexity (0.059 standard deviations) following ChatGPT's release. This effect grew stronger over time, with the most recent period showing the largest impact (0.092 standard deviations), suggesting a fundamental shift in how developers utilize Stack Overflow rather than a temporary adjustment.
 
