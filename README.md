@@ -60,7 +60,9 @@ where $\omega_j$ are unit weights, $\lambda_t$ are time weights, and $T_0$ is th
 
 For the event study analysis, we use the SDID event study estimator (Ciccia, 2024):
 
-$$\hat{\tau}^{sdid}_{\ell} = \sum_{a \in A_{\ell}} \frac{N^a_{tr}}{N^{\ell}_{tr}} \hat{\tau}^{sdid}_{a,\ell}$$
+```math
+\hat{\tau}^{sdid}_{\ell} = \sum_{a \in A_{\ell}} \frac{N^a_{tr}}{N^{\ell}_{tr}} \hat{\tau}^{sdid}_{a,\ell}
+```
 
 This approach allows us to examine treatment effects at specific time points relative to ChatGPT's release.
 
@@ -86,9 +88,9 @@ We constructed a parsimonious complexity score for forum posts composed of 4 key
 
 The standardized complexity score is calculated as:
 
-$$
+```math
 \text{Complexity Score}_{i,t} = \frac{1}{4} \left( \frac{\text{TagCount}_{i,t} - \mu_{\text{TagCount}}}{\sigma_{\text{TagCount}}} + \frac{\text{TechExprLength}_{i,t} - \mu_{\text{TechExprLength}}}{\sigma_{\text{TechExprLength}}} \right. \left. + \frac{\text{BodyLength}_{i,t} - \mu_{\text{BodyLength}}}{\sigma_{\text{BodyLength}}} + \frac{\text{TitleLength}_{i,t} - \mu_{\text{TitleLength}}}{\sigma_{\text{TitleLength}}} \right)
-$$
+```
 
 ![Event study result](imgs/stata/sdid_nlp_trends101.svg)
 
