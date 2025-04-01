@@ -59,7 +59,7 @@ where $Y_{it}$ represents either the log-transformed question count or complexit
 For our synthetic DiD approach, the estimator can be expressed as:
 
 ```math
-hat{\tau}_{\text{SDID}} = \sum_{t=T_0+1}^T \lambda_t \left( Y_{1t} - \sum_{j=2}^J \omega_j Y_{jt} \right) - \sum_{t=1}^{T_0} \lambda_t \left( Y_{1t} - \sum_{j=2}^J \omega_j Y_{jt} \right)
+\hat{\tau}_{\text{SDID}} = \sum_{t=T_0+1}^T \lambda_t \left( Y_{1t} - \sum_{j=2}^J \omega_j Y_{jt} \right) - \sum_{t=1}^{T_0} \lambda_t \left( Y_{1t} - \sum_{j=2}^J \omega_j Y_{jt} \right)
 ```
 
 where $\omega_j$ are unit weights, $\lambda_t$ are time weights, and $T_0$ is the last pre-treatment period.
