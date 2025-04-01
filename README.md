@@ -2,10 +2,6 @@
 
 This project investigates how ChatGPT's release has transformed question patterns on Stack Overflow, combining causal inference with text mining to measure both quantitative and qualitative impacts.
 
-The full analysis can be found here:
-
-- [![Paper PDF](https://img.shields.io/badge/PDF-Download%20Paper-red)](/JimenezPeistSimakova.pdf)
-
 ## Authors
 
 - Blanca Jimenez
