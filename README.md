@@ -1,10 +1,8 @@
 # Overflow Under-Flowed: ChatGPT's Impact on Stack Overflow
 
-This project investigates how ChatGPT's release has transformed question patterns on Stack Overflow, combining causal inference with text mining to measure both quantitative and qualitative impacts.
+This project investigates how ChatGPT's release has transformed question patterns on Stack Overflow, combining causal inference with text mining to measure both quantitative and qualitative impacts. The final paper can be found here:
 
-The final paper can be found here:
-
-- [![Paper PDF](https://img.shields.io/badge/PDF-Download%20Paper-red)](/JimenezPeistSimakova.pdf)
+[![Paper PDF](https://img.shields.io/badge/PDF-Download%20Paper-red)](/JimenezPeistSimakova.pdf)
 
 ## Authors
 
