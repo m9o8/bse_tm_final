@@ -177,4 +177,6 @@ cython_debug/
 data/
 
 # Ignore test files
-test.*
+test.*# pixi environments
+.pixi/*
+!.pixi/config.toml
